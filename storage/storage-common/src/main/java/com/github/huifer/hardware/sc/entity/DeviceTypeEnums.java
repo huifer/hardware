@@ -1,11 +1,11 @@
-package com.github.huifer.hardware.sc.influx;
+package com.github.huifer.hardware.sc.entity;
 
 public enum DeviceTypeEnums {
   LIULIANG("流量计", "liuliang"),
   YEWEI("液位计", "yewei"),
   ;
-  private String name;
-  private String code;
+  private final String name;
+  private final String code;
 
   public String getName() {
     return name;

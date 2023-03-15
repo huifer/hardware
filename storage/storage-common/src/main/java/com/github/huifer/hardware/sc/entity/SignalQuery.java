@@ -1,6 +1,5 @@
-package com.github.huifer.hardware.sc.influx;
+package com.github.huifer.hardware.sc.entity;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Data;
 import lombok.experimental.FieldNameConstants;

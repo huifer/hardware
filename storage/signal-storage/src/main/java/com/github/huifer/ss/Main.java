@@ -1,13 +1,11 @@
 package com.github.huifer.ss;
 
-import com.github.huifer.hardware.sc.influx.SignalDocument;
+import com.github.huifer.hardware.sc.entity.SignalDocument;
 import com.influxdb.client.InfluxDBClient;
 import com.influxdb.client.InfluxDBClientFactory;
 import com.influxdb.client.WriteApiBlocking;
 import com.influxdb.client.domain.WritePrecision;
-import com.influxdb.client.write.Point;
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.util.Random;
 
 public class Main {

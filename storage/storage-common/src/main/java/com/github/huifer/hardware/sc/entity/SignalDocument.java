@@ -1,11 +1,9 @@
-package com.github.huifer.hardware.sc.influx;
+package com.github.huifer.hardware.sc.entity;
 
-import java.time.LocalDateTime;
 import lombok.Data;
 import lombok.experimental.FieldNameConstants;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Field;
 
 @Data
 @FieldNameConstants

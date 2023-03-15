@@ -1,4 +1,4 @@
-package com.github.huifer.hardware.sc.influx;
+package com.github.huifer.hardware.sc.entity;
 
 public enum ReduceTypeEnums {
 

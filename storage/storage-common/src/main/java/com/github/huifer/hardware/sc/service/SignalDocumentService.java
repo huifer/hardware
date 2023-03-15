@@ -1,9 +1,9 @@
-package com.github.huifer.hardware.sm.service;
+package com.github.huifer.hardware.sc.service;
 
-import com.github.huifer.hardware.sc.influx.ReduceTypeEnums;
-import com.github.huifer.hardware.sc.influx.SignQueryResponse;
-import com.github.huifer.hardware.sc.influx.SignalDocument;
-import com.github.huifer.hardware.sc.influx.SignalQuery;
+import com.github.huifer.hardware.sc.entity.ReduceTypeEnums;
+import com.github.huifer.hardware.sc.entity.SignQueryResponse;
+import com.github.huifer.hardware.sc.entity.SignalDocument;
+import com.github.huifer.hardware.sc.entity.SignalQuery;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;

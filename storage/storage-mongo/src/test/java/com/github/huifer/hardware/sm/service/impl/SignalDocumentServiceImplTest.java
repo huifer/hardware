@@ -1,12 +1,11 @@
 package com.github.huifer.hardware.sm.service.impl;
 
-import com.github.huifer.hardware.sc.influx.DeviceTypeEnums;
-import com.github.huifer.hardware.sc.influx.ReduceTypeEnums;
-import com.github.huifer.hardware.sc.influx.SignQueryResponse;
-import com.github.huifer.hardware.sc.influx.SignalDocument;
-import com.github.huifer.hardware.sc.influx.SignalQuery;
+import com.github.huifer.hardware.sc.entity.DeviceTypeEnums;
+import com.github.huifer.hardware.sc.entity.ReduceTypeEnums;
+import com.github.huifer.hardware.sc.entity.SignQueryResponse;
+import com.github.huifer.hardware.sc.entity.SignalDocument;
+import com.github.huifer.hardware.sc.entity.SignalQuery;
 import com.github.huifer.hardware.sm.CustomerBeans;
-import com.github.huifer.hardware.sm.service.SignalDocumentService;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
