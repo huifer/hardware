@@ -12,6 +12,9 @@
     <module>storage</module>
     <module>data</module>
     <module>render</module>
+    <module>common</module>
+    <module>scheduled</module>
+    <module>warring</module>
   </modules>
 
   <properties>

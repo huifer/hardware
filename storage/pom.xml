@@ -12,9 +12,10 @@
   <artifactId>hardware-storage</artifactId>
   <packaging>pom</packaging>
   <modules>
-    <module>signal-storage</module>
     <module>storage-common</module>
     <module>storage-mongo</module>
+    <module>storage-rest</module>
+    <module>storage-server</module>
   </modules>
 
   <properties>
@@ -31,6 +32,17 @@
         <artifactId>storage-common</artifactId>
         <version>${storage.version}</version>
       </dependency>
+      <dependency>
+        <groupId>com.github.huifer</groupId>
+        <artifactId>storage-mongo</artifactId>
+        <version>${storage.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.huifer</groupId>
+        <artifactId>storage-rest</artifactId>
+        <version>${storage.version}</version>
+      </dependency>
+
     </dependencies>
   </dependencyManagement>
 </project>

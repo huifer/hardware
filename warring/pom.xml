@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <artifactId>warring</artifactId>
+  <packaging>pom</packaging>
+  <description>报警系统</description>
+  <modules>
+    <module>warring-server</module>
+  </modules>
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>com.github.huifer</groupId>
     <artifactId>hardware</artifactId>
+    <groupId>com.github.huifer</groupId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-  <artifactId>render</artifactId>
 
   <properties>
     <maven.compiler.source>17</maven.compiler.source>

@@ -1,0 +1,17 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+participant 硬件 as hd
+control 数据接受器 as ctr
+queue 数据接收队列 as dq
+participant 数据存储服务 as sever
+database 数据库 as db
+
+hd -> ctr : 推送
+ctr --> dq: 数据放入mq
+ctr -> hd: 结束
+
+sever --> dq: 拉取
+sever -->db: 写入数据
+@enduml

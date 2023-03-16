@@ -1,0 +1,18 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+participant 硬件数据供应商 as prod
+participant 服务端 as server1
+queue 数据接收队列 as dq
+queue 报警队列 as bdq
+participant 数据存储服务 as sever
+database 数据库 as db
+loop 定时任务
+  server1 -> prod : 拉取数据
+  server1 ->dq:数据放入mq
+  server1 --> bdq: 判断是否报警，放入报警队列
+  sever --> dq: 拉取
+  sever -->db: 写入数据
+end
+@enduml

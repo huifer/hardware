@@ -1,0 +1,5 @@
+spring:
+  profiles:
+    active: mongo,logging,storage
+server:
+  port: 9011

@@ -13,6 +13,7 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -23,23 +24,25 @@ import org.bson.types.ObjectId;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.mongodb.core.DocumentCallbackHandler;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-@Service
-public class SignalDocumentServiceImpl implements SignalDocumentService {
+public class SignalDocumentServiceMongoImpl implements SignalDocumentService {
 
+  public static final String SignalDocumentServiceMongoBeanName = "SignalDocumentServiceMongoBean";
   public static final String DEVICE_COLLECTION_PRE = "data_";
-  private static final Logger logger = LoggerFactory.getLogger(SignalDocumentServiceImpl.class);
-  @Autowired
-  private MongoTemplate mongoTemplate;
+  private static final Logger logger = LoggerFactory.getLogger(
+      SignalDocumentServiceMongoImpl.class);
+  private final MongoTemplate mongoTemplate;
+
+  public SignalDocumentServiceMongoImpl(MongoTemplate mongoTemplate) {
+    this.mongoTemplate = mongoTemplate;
+  }
 
   @Transactional(rollbackFor = {Exception.class})
 
@@ -59,7 +62,7 @@ public class SignalDocumentServiceImpl implements SignalDocumentService {
   }
 
   private String buildCollectionName(DeviceTypeEnums enums, String deviceId) {
-    return DEVICE_COLLECTION_PRE + enums.getCode() + "_" + deviceId;
+    return (DEVICE_COLLECTION_PRE + enums.getCode() + "_" + deviceId).toLowerCase(Locale.ROOT);
   }
 
   @Override
@@ -124,7 +127,7 @@ public class SignalDocumentServiceImpl implements SignalDocumentService {
   }
 
   @Override
-  public Map<String, Map<String, SignQueryResponse>> querySingWithRange(
+  public Map<String, Map<Integer, SignQueryResponse>> querySingWithRange(
       SignalQuery signalQuery,
       ReduceTypeEnums reduceTypeEnums,
       int sec
@@ -152,9 +155,9 @@ public class SignalDocumentServiceImpl implements SignalDocumentService {
       List<LongRange> longRanges = timeRange(signalQuery.getStartTime(), signalQuery.getEndTime(),
           sec * 1000L);
 
-      Map<String, Map<String, SignQueryResponse>> res = new HashMap<>();
+      Map<String, Map<Integer, SignQueryResponse>> res = new HashMap<>();
       for (String key : keys) {
-        Map<String, SignQueryResponse> data = new HashMap<>();
+        Map<Integer, SignQueryResponse> data = new HashMap<>();
 
         for (int i = 0; i < longRanges.size(); i++) {
           LongRange longRange = longRanges.get(i);
@@ -169,7 +172,7 @@ public class SignalDocumentServiceImpl implements SignalDocumentService {
           value.setEnd(longRange.end);
           value.setTimeRange(longRange.start + "-" + longRange.end);
 
-          data.put(String.valueOf(i + 1), value);
+          data.put(i+1, value);
         }
         res.put(key, data);
       }

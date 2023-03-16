@@ -1,0 +1,10 @@
+{
+  "properties": [
+    {
+      "name": "hd.storage.type",
+      "type": "java.lang.String",
+      "description": "存储类型",
+      "defaultValue": "MONGO"
+    }
+  ]
+}

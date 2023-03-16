@@ -1,8 +1,8 @@
 package com.github.huifer.hardware.sc.entity;
 
 public enum DeviceTypeEnums {
-  LIULIANG("流量计", "liuliang"),
-  YEWEI("液位计", "yewei"),
+  LIULIANG("流量计", "LIULIANG"),
+  YEWEI("液位计", "YEWEI"),
   ;
   private final String name;
   private final String code;

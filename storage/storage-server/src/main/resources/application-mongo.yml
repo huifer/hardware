@@ -1,0 +1,11 @@
+spring:
+  data:
+    mongodb:
+      database: device
+      username: admin
+      password: admin
+      host: 172.16.0.165
+      port: 27017
+      uri: mongodb://${spring.data.mongodb.username}:${spring.data.mongodb.password}@${spring.data.mongodb.host}:${spring.data.mongodb.port}/${spring.data.mongodb.database}?retryWrites=true&w=majority&authSource=admin
+
+

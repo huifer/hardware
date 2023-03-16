@@ -5,6 +5,7 @@ import com.github.huifer.hardware.sc.entity.ReduceTypeEnums;
 import com.github.huifer.hardware.sc.entity.SignQueryResponse;
 import com.github.huifer.hardware.sc.entity.SignalDocument;
 import com.github.huifer.hardware.sc.entity.SignalQuery;
+import com.github.huifer.hardware.sc.service.SignalDocumentService;
 import com.github.huifer.hardware.sm.CustomerBeans;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -85,6 +87,11 @@ class SignalDocumentServiceImplTest {
     signalDocumentService.query(signalQuery);
   }
 
+  public static void main(String[] args) {
+    System.out.println(1678693692974L);
+    System.out.println(1678693692974L + 10 * 1000L);
+  }
+
   @Test
   public void queryRange(){
     SignalQuery signalQuery = new SignalQuery();
@@ -96,12 +103,16 @@ class SignalDocumentServiceImplTest {
     keys.add("sig_2");
     signalQuery.setKeys(keys);
     signalQuery.setStartTime(1678693692974L);
-    signalQuery.setEndTime(1678693692974L + 10*1000L);
-    Map<String, Map<String, SignQueryResponse>> stringMapMap = signalDocumentService.querySingWithRange(
+    signalQuery.setEndTime(1678693692974L + 10 * 1000L);
+    Map<String, Map<Integer, SignQueryResponse>> stringMapMap = signalDocumentService.querySingWithRange(
         signalQuery, ReduceTypeEnums.AVG, 1);
     System.out.println();
   }
 
-  @Autowired
   private SignalDocumentService signalDocumentService;
+
+  @BeforeEach
+  public void beforeEach() {
+    signalDocumentService = new SignalDocumentServiceMongoImpl(mongoTemplate);
+  }
 }

@@ -1,0 +1,3 @@
+hd:
+  storage:
+    type: MONGO
