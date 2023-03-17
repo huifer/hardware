@@ -101,6 +101,7 @@ class TaskNoStepServiceImplTest {
     value.setSignal("sig_4");
     value.setDeviceId("device_1");
     value.setDeviceType("device_1");
+    value.setReduceTypeEnums(ReduceTypeEnums.MAX);
     calcParamMappingQuery.put("a", value);
     e.setCalcParamMappingQuery(calcParamMappingQuery);
     HashMap<String, List<FilterEntity>> calcParamFilter = new HashMap<>();
@@ -120,7 +121,7 @@ class TaskNoStepServiceImplTest {
     public QueryResponse extract(QueryEntity query) {
       QueryResponse res = new QueryResponse();
       res.setSignle(query.getSignal());
-      res.setReduceTypeEnums(ReduceTypeEnums.AVG);
+      res.setReduceTypeEnums(query.getReduceTypeEnums());
       List<BigDecimal> r = new ArrayList<>();
       for (int i = 0; i < 10; i++) {
         r.add(BigDecimal.valueOf(i));

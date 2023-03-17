@@ -42,7 +42,11 @@ public class TaskNoStepServiceImpl implements TaskNoStepService {
 
   @Override
   public QueryResponse extract(QueryEntity query) {
-    return null;
+    QueryResponse res = new QueryResponse();
+    // 这段代码必须写，他用来做数据归并用
+    res.setReduceTypeEnums(query.getReduceTypeEnums());
+
+    return res;
   }
 
   @Override
