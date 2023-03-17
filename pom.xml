@@ -17,16 +17,6 @@
     <module>warring</module>
   </modules>
 
-  <properties>
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>17</maven.compiler.target>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <influxdb.version>6.3.0</influxdb.version>
-    <hutools.version>5.8.15</hutools.version>
-    <lombok.version>1.18.26</lombok.version>
-    <spring.data.mongo.version>3.0.4</spring.data.mongo.version>
-    <common-lang3.version>3.12.0</common-lang3.version>
-  </properties>
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -84,9 +74,39 @@
         <artifactId>echarts-java</artifactId>
         <version>1.0.7</version>
       </dependency>
+      <dependency>
+        <artifactId>common</artifactId>
+        <groupId>com.github.huifer</groupId>
+        <version>${version}</version>
+      </dependency>
 
+      <dependency>
+        <artifactId>spring-cloud-stream-dependencies</artifactId>
+        <groupId>org.springframework.cloud</groupId>
+        <scope>import</scope>
+        <type>pom</type>
+        <version>${spring-cloud-stream.version}</version>
+      </dependency>
+      <!-- https://mvnrepository.com/artifact/com.googlecode.aviator/aviator -->
+      <dependency>
+        <groupId>com.googlecode.aviator</groupId>
+        <artifactId>aviator</artifactId>
+        <version>${googlecode.aviator.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
+  <properties>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <influxdb.version>6.3.0</influxdb.version>
+    <hutools.version>5.8.15</hutools.version>
+    <lombok.version>1.18.26</lombok.version>
+    <spring.data.mongo.version>3.0.4</spring.data.mongo.version>
+    <common-lang3.version>3.12.0</common-lang3.version>
+    <googlecode.aviator.version>5.3.3</googlecode.aviator.version>
+    <spring-cloud-stream.version>4.0.1</spring-cloud-stream.version>
+  </properties>
   <dependencies>
     <dependency>
       <groupId>org.projectlombok</groupId>

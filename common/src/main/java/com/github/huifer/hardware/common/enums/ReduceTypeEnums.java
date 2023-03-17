@@ -1,4 +1,4 @@
-package com.github.huifer.hardware.sc.entity;
+package com.github.huifer.hardware.common.enums;
 
 public enum ReduceTypeEnums {
 

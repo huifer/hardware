@@ -1,7 +1,7 @@
 package com.github.huifer.hardware.sm.service.impl;
 
-import com.github.huifer.hardware.sc.entity.DeviceTypeEnums;
-import com.github.huifer.hardware.sc.entity.ReduceTypeEnums;
+import com.github.huifer.hardware.common.enums.ReduceTypeEnums;
+import com.github.huifer.hardware.common.enums.DeviceTypeEnums;
 import com.github.huifer.hardware.sc.entity.SignQueryResponse;
 import com.github.huifer.hardware.sc.entity.SignalDocument;
 import com.github.huifer.hardware.sc.entity.SignalQuery;

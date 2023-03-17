@@ -1,6 +1,6 @@
 package com.github.huifer.hardware.sc.service;
 
-import com.github.huifer.hardware.sc.entity.ReduceTypeEnums;
+import com.github.huifer.hardware.common.enums.ReduceTypeEnums;
 import com.github.huifer.hardware.sc.entity.SignQueryResponse;
 import com.github.huifer.hardware.sc.entity.SignalDocument;
 import com.github.huifer.hardware.sc.entity.SignalQuery;

@@ -12,7 +12,7 @@ import org.springframework.context.ApplicationEvent;
 public class DataReceptionEvent extends ApplicationEvent {
 
   /**
-   * 数据对象
+   * 数据对象 这是一个json
    **/
   private String data;
   /**
