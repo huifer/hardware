@@ -2,58 +2,45 @@ package com.github.huifer.hardware.information.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.FieldNameConstants;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+/**
+ * 硬件信号和硬件类型信号的对应关系
+ **/
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldNameConstants
 @ToString
-@Document("hardware_info")
-public class HardwareInfoEntity implements Serializable {
+@Document
+public class HardwareSignMappingEntity implements Serializable {
 
   @Id
   private String id;
 
   /**
-   * 设备名称
+   * 硬件唯一标识（系统的）
    **/
-  private String deviceName;
+  private String HardwareUid;
   /**
-   * 设备地址
+   * 硬件类型id
    **/
-  private String address;
-  /**
-   * 坐标
-   **/
-  private String coordinates;
-  /**
-   * 系统唯一id
-   **/
-  private String uid;
+  private String hardwareTypeId;
 
-
+  private HardwareSignalEntity hardwareSignalEntity;
   /**
-   * 硬件扩展信息
+   * 硬件输出信号key
    **/
-  private List<HardwareInfoExtensionsEntity> extensionsEntities;
-
-
-  /**
-   * 状态
-   */
-  private String status;
-  /**
-   * 是否删除
-   **/
-  private boolean deleted;
+  private String fromKey;
   private LocalDateTime createTime;
+  private boolean deleted;
 
 }

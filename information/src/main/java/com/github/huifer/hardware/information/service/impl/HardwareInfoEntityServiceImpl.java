@@ -7,20 +7,24 @@ import com.github.huifer.hardware.information.servlet.HardwareInfoQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class HardwareInfoEntityServiceImpl implements HardwareInfoEntityService {
 
+  @Transactional(rollbackFor = {Exception.class})
   @Override
   public void save(HardwareInfoEntity hardwareInfoEntity) {
 
   }
 
+  @Transactional(rollbackFor = {Exception.class})
   @Override
   public void update(HardwareInfoEntity hardwareInfoEntity) {
 
   }
 
+  @Transactional(rollbackFor = {Exception.class})
   @Override
   public void delete(String id) {
 

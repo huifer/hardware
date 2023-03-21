@@ -15,7 +15,7 @@
     <module>storage-common</module>
     <module>storage-mongo</module>
     <module>storage-rest</module>
-    <module>storage-server</module>
+    <module>storage-start</module>
   </modules>
 
   <properties>

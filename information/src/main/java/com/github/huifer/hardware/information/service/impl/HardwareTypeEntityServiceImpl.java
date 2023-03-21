@@ -81,9 +81,10 @@ public class HardwareTypeEntityServiceImpl implements HardwareTypeEntityService 
     }
     Query query1 = new Query();
     query1.with(of);
+    query1.addCriteria(Criteria.where(Fields.deleted).is(false));
 
     if (!org.apache.commons.lang3.StringUtils.isEmpty(query.getName())) {
-      Criteria nameCriteria = Criteria.where(Fields.name).is(query.getName());
+      query1.addCriteria(Criteria.where(Fields.name).regex(query.getName()));
     }
     //    query1.addCriteria(Criteria.where("hardwareSignalEntities.key").regex("sig_1"));
 //    mongoTemplate.executeQuery(query1, HardwareTypeEntity.class, new DocumentCallbackHandler() {
@@ -102,7 +103,7 @@ public class HardwareTypeEntityServiceImpl implements HardwareTypeEntityService 
     pageResult.setSize(of.getPageSize());
     pageResult.setData(hardwareTypeEntities);
 
-    return null;
+    return pageResult;
   }
 
   @Override

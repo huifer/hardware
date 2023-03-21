@@ -1,19 +1,22 @@
 package com.github.huifer.hardware.information.service.impl;
 
 import com.github.huifer.hardware.common.base.PageAndSortRequest;
+import com.github.huifer.hardware.common.base.PageResponse;
 import com.github.huifer.hardware.information.CustomerBeans;
 import com.github.huifer.hardware.information.entity.HardwareInfoEntity;
+import com.github.huifer.hardware.information.entity.HardwareInfoExtensionsEntity;
 import com.github.huifer.hardware.information.entity.HardwareSignalEntity;
 import com.github.huifer.hardware.information.entity.HardwareTypeEntity;
 import com.github.huifer.hardware.information.service.HardwareInfoEntityService;
+import com.github.huifer.hardware.information.service.HardwareSignMappingEntityService;
 import com.github.huifer.hardware.information.service.HardwareTypeEntityService;
 import com.github.huifer.hardware.information.servlet.HardwareTypeQuery;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(classes = {CustomerBeans.class})
@@ -54,6 +57,9 @@ class HardwareInfoEntityServiceImplTest {
     }
   }
 
+  @Autowired
+  private HardwareSignMappingEntityService hardwareSignMappingEntityService;
+
   @Test
   void findBy() {
     HardwareTypeEntity e = this.hardwareTypeEntityService.findById("64190ed725cddb44b9f888aa");
@@ -61,15 +67,31 @@ class HardwareInfoEntityServiceImplTest {
     page1.setPage(0);
     page1.setSize(10);
 
-    Page<HardwareTypeEntity> page = this.hardwareTypeEntityService.page(page1, new HardwareTypeQuery());
+    PageResponse<HardwareTypeEntity> page = this.hardwareTypeEntityService.page(page1,
+        new HardwareTypeQuery());
     System.out.println();
   }
-
 
   @org.junit.jupiter.api.Test
   void save() {
     HardwareInfoEntity hardwareInfoEntity = new HardwareInfoEntity();
+    hardwareInfoEntity.setDeviceName("设备名称1");
+    hardwareInfoEntity.setAddress("设备地址1");
+    hardwareInfoEntity.setCoordinates("设备坐标1");
+    String uid = UUID.randomUUID().toString();
+    hardwareInfoEntity.setUid(uid);
+    ArrayList<HardwareInfoExtensionsEntity> extensionsEntities = new ArrayList<>();
+    HardwareInfoExtensionsEntity e = new HardwareInfoExtensionsEntity();
+    e.setUsing(true);
+    e.setDeviceId("硬件供应商id");
+
+    extensionsEntities.add(e);
+    hardwareInfoEntity.setExtensionsEntities(extensionsEntities);
+    hardwareInfoEntity.setStatus("使用");
+    hardwareInfoEntity.setDeleted(false);
+
     hardwareInfoEntityService.save(hardwareInfoEntity);
+
 
   }
 

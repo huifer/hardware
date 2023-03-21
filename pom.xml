@@ -16,6 +16,7 @@
     <module>scheduled</module>
     <module>warring</module>
     <module>information</module>
+    <module>web</module>
   </modules>
 
   <dependencyManagement>
