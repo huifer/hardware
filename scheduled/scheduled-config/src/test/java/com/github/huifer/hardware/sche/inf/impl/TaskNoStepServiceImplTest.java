@@ -33,6 +33,7 @@ class TaskNoStepServiceImplTest {
   public void find() {
     List<RuleEntity> ruleEntities = tsk.getRuleEntities();
     Object execute = taskNoStepService.execute(ruleEntities);
+    System.out.println(execute);
   }
 
   @BeforeEach
@@ -51,7 +52,7 @@ class TaskNoStepServiceImplTest {
 
     taskEntity.setRuleEntities(ruleEntities);
     tsk = taskEntity;
-
+    System.out.println(gson.toJson(taskEntity));
   }
 
   private RuleEntity s3() {

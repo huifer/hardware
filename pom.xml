@@ -15,6 +15,7 @@
     <module>common</module>
     <module>scheduled</module>
     <module>warring</module>
+    <module>information</module>
   </modules>
 
   <dependencyManagement>
@@ -93,6 +94,22 @@
         <artifactId>aviator</artifactId>
         <version>${googlecode.aviator.version}</version>
       </dependency>
+      <dependency>
+        <groupId>io.swagger.core.v3</groupId>
+        <artifactId>swagger-annotations</artifactId>
+        <version>2.2.8</version>
+      </dependency>
+
+      <!--      <dependency>-->
+<!--        <groupId>com.mysema.querydsl</groupId>-->
+<!--        <artifactId>querydsl-mongodb</artifactId>-->
+<!--        <version>4.3.1</version>-->
+<!--      </dependency>-->
+<!--      <dependency>-->
+<!--        <groupId>com.mysema.querydsl</groupId>-->
+<!--        <artifactId>querydsl-apt</artifactId>-->
+<!--        <version>4.3.1</version>-->
+<!--      </dependency>-->
     </dependencies>
   </dependencyManagement>
   <properties>
