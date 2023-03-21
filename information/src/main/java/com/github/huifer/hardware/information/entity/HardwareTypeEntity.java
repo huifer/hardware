@@ -24,7 +24,7 @@ public class HardwareTypeEntity implements Serializable {
   @Id
   private String id;
   /**
-   * 硬件名称
+   * 硬件类型名称
    **/
   private String name;
   /**

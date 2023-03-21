@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+/**
+ * 硬件类型中的数据和硬件实体映射
+ **/
 @RequestMapping("hardware_sign_mapping")
 @RestController
 public class HardwareSignMappingEntityCtr {

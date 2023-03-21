@@ -63,12 +63,12 @@ public class HardwareSignMappingEntityServiceImpl implements HardwareSignMapping
       of = PageRequest.of(page.getPage(), page.getSize(), by);
     }
     Query query1 = new Query();
-    query1.with(of);
     query1.addCriteria(Criteria.where(Fields.deleted).is(false));
+    long count = mongoTemplate.count(query1, HardwareSignMappingEntity.class);
+    query1.with(of);
 
     List<HardwareSignMappingEntity> hardwareSignMappingEntities = mongoTemplate.find(query1,
         HardwareSignMappingEntity.class);
-    long count = mongoTemplate.count(query1, HardwareSignMappingEntity.class);
 
     PageResponse<HardwareSignMappingEntity> pageResult = new PageResponse<>();
     pageResult.setTotal(count);

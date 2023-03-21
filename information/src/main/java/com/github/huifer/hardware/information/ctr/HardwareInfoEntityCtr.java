@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+/**
+ * 硬件信息
+ **/
 @RequestMapping("hardware_info")
 @RestController
 public class HardwareInfoEntityCtr {

@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class ResultResponse<T> {
 
-  public static final String SUCCESS_CODE = "ok";
+  public static final String SUCCESS_CODE = "20000";
   public static final String ERROR_CODE = "error";
   private String code;
   private T data;

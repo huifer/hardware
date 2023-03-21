@@ -80,7 +80,6 @@ public class HardwareTypeEntityServiceImpl implements HardwareTypeEntityService 
       of = PageRequest.of(page.getPage(), page.getSize(), by);
     }
     Query query1 = new Query();
-    query1.with(of);
     query1.addCriteria(Criteria.where(Fields.deleted).is(false));
 
     if (!org.apache.commons.lang3.StringUtils.isEmpty(query.getName())) {
@@ -93,9 +92,10 @@ public class HardwareTypeEntityServiceImpl implements HardwareTypeEntityService 
 //
 //      }
 //    });
+    long count = mongoTemplate.count(query1, HardwareTypeEntity.class);
+    query1.with(of);
     List<HardwareTypeEntity> hardwareTypeEntities = mongoTemplate.find(query1,
         HardwareTypeEntity.class);
-    long count = mongoTemplate.count(query1, HardwareTypeEntity.class);
 
     PageResponse<HardwareTypeEntity> pageResult = new PageResponse<>();
     pageResult.setTotal(count);

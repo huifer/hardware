@@ -35,7 +35,7 @@ class HardwareInfoEntityServiceImplTest {
       entity.setName("类型" + i);
       ArrayList<HardwareSignalEntity> hardwareSignalEntities = new ArrayList<>();
       HardwareSignalEntity e = new HardwareSignalEntity();
-      e.setKey("sig_1");
+      e.setSysKey("sig_1");
       e.setName("信号1");
       e.setMin(BigDecimal.ZERO);
       e.setMax(BigDecimal.TEN);
@@ -43,7 +43,7 @@ class HardwareInfoEntityServiceImplTest {
       e.setDefaultWaringMax(BigDecimal.TEN);
       hardwareSignalEntities.add(e);
       HardwareSignalEntity e1 = new HardwareSignalEntity();
-      e1.setKey("sig_2");
+      e1.setSysKey("sig_2");
       e1.setName("信号2");
       e1.setMin(BigDecimal.ZERO);
       e1.setMax(BigDecimal.TEN);

@@ -6,16 +6,19 @@ import com.github.huifer.hardware.common.base.ResultResponse;
 import com.github.huifer.hardware.information.entity.HardwareTypeEntity;
 import com.github.huifer.hardware.information.service.HardwareTypeEntityService;
 import com.github.huifer.hardware.information.servlet.HardwareTypeQuery;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+/**
+ * 硬件类型
+ **/
 @RequestMapping("hardware_type")
 @RestController
+@CrossOrigin
 public class HardwareTypeEntityCtr {
 
   private final HardwareTypeEntityService hardwareTypeEntityService;
@@ -38,7 +41,8 @@ public class HardwareTypeEntityCtr {
   }
 
   @PostMapping("/update")
-  public ResultResponse<Boolean> update(HardwareTypeEntity entity) {
+  public ResultResponse<Boolean> update(
+     @RequestBody HardwareTypeEntity entity) {
     hardwareTypeEntityService.update(entity);
     return ResultResponse.ok("ok");
   }

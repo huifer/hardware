@@ -20,9 +20,9 @@ import lombok.ToString;
 public class HardwareSignalEntity {
 
   /**
-   * 硬件供应商提供的信号键
+   * 系统型号标识
    **/
-  private String key;
+  private String sysKey;
   /**
    * 信号名称
    **/
