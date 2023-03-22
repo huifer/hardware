@@ -31,7 +31,7 @@ public class HardwareInfoEntityCtr {
   }
 
 
-  @PostMapping("/create")
+  @PostMapping("/save")
   public ResultResponse<Boolean> save(@RequestBody HardwareInfoEntity hardwareInfoEntity) {
     this.hardwareInfoEntityService.save(hardwareInfoEntity);
     return ResultResponse.ok();

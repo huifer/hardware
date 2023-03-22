@@ -20,7 +20,7 @@ public class HardwareInfoExtensionsEntity {
   /**
    * 当前属性是否使用
    **/
-  private boolean using = false;
+  private int  using = 1;
 
 
   /**

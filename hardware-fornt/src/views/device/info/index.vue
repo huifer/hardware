@@ -66,15 +66,11 @@
           @page-change="onPageChange"
       >
         <template #operations="{ record }">
-          <a-button size="small" type="text" @click="show(record)">
-            查看
-          </a-button>
+
           <a-button size="small" type="text" @click="update(record)">
             修改
           </a-button>
-          <a-button size="small" type="text" @click="delte(record)">
-            删除
-          </a-button>
+
         </template>
 
       </a-table>
@@ -83,7 +79,7 @@
 
     <a-modal v-model:visible="showVisible" width="60%" @cancel="cancelAdd" @ok="submitAdd">
       <template #title>
-        创建硬件类型
+        创建硬件信息
       </template>
       <a-form :model="createRequest" layout="vertical">
         <a-space :size="16" direction="vertical">
@@ -182,7 +178,7 @@
     <a-modal v-model:visible="showUpdateVisible" width="60%" @cancel="cancelUpdate"
              @ok="submitUpdate">
       <template #title>
-        创建硬件类型
+        修改硬件信息
       </template>
       <a-form :model="updateRequest" layout="vertical">
         <a-space :size="16" direction="vertical">
@@ -256,7 +252,6 @@
               >
               </a-col>
             </a-row>
-
             <a-table :columns="columnsAdd" :data="updateRequest.extensionsEntities">
               <template #deviceId="{ rowIndex }">
                 <a-input v-model="updateRequest.extensionsEntities[rowIndex].deviceId"/>
@@ -272,8 +267,6 @@
                 </a-button>
               </template>
             </a-table>
-
-
           </a-card>
         </a-space>
       </a-form>
@@ -285,19 +278,33 @@
 <script lang="ts" setup>
 import {onMounted, reactive, ref} from "vue";
 import {Pagination} from "@/types/global";
-import {HardwareInfoById, HardwareInfoPage} from "@/views/device/info/api";
-import {HardwareTypePage} from "@/views/device/type/api";
+import {
+  HardwareInfoById,
+  HardwareInfoCreate,
+  HardwareInfoPage,
+  HardwareInfoUpdate
+} from "@/views/device/info/api";
+import {Message} from "@arco-design/web-vue";
 
 const using = ref([
   {
     label: "使用",
-    value: "true"
+    value: 1
   }, {
     label: "未使用",
-    value: "false"
+    value: 0
   }
-])
+]);
+const bool = ref(true);
 const showVisible = ref(false);
+const defaultCreate = {
+  deviceName: null,
+  address: null,
+  coordinates: null,
+  status: null,
+  extensionsEntities: [],
+
+}
 const createRequest = ref({
   deviceName: null,
   address: null,
@@ -322,14 +329,14 @@ const delForUpdateArow = (recode) => {
 };
 const addForRow = () => {
   createRequest.value.extensionsEntities.push({
-    using: "true",
+    using: 1,
     deviceId: "",
 
   })
 };
 const addForUpdateRow = () => {
   updateRequest.value.extensionsEntities.push({
-    using: "true",
+    using: 1,
     deviceId: "",
 
   })
@@ -399,16 +406,42 @@ const cancelUpdate = () => {
   showUpdateVisible.value = false;
   updateRequest.value = {};
 }
-const submitUpdate = () => {
-
-}
+const submitUpdate = async () => {
+  console.log(updateRequest.value);
+  await HardwareInfoUpdate(updateRequest.value).then(
+      (res) => {
+        if (res.code == 20000) {
+          Message.success("创建成功")
+          updateRequest.value = {};
+          fetchData();
+        } else {
+          Message.error("创建失败")
+          updateRequest.value = {};
+        }
+      }
+  )
+  showUpdateVisible.value = false
+};
 const cancelAdd = () => {
   showVisible.value = false
-  createRequest.value = {};
+  createRequest.value = defaultCreate;
 
 }
-const submitAdd = () => {
-  console.log(createRequest.value)
+const submitAdd = async () => {
+  await HardwareInfoCreate(createRequest.value).then(
+      (res) => {
+        if (res.code == 20000) {
+          Message.success("创建成功")
+          createRequest.value = defaultCreate;
+          fetchData();
+        } else {
+          Message.error("创建失败")
+          createRequest.value = defaultCreate;
+        }
+      }
+  )
+  showVisible.value = false
+
 }
 
 const search = async () => {
@@ -451,7 +484,8 @@ const show = async (roce) => {
 const update = async (roce) => {
   showUpdateVisible.value = true;
   let {data} = await HardwareInfoById(roce.id)
-  updateRequest.value = data.data;
+  console.log("1")
+  updateRequest.value = data;
 
 }
 const delte = () => {

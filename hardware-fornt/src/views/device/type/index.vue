@@ -89,15 +89,11 @@
 
 
         <template #operations="{ record }">
-          <a-button size="small" type="text" @click="show(record)">
-            查看
-          </a-button>
+
           <a-button size="small" type="text" @click="update(record)">
             修改
           </a-button>
-          <a-button size="small" type="text" @click="delte(record)">
-            删除
-          </a-button>
+          
         </template>
 
       </a-table>
@@ -394,6 +390,11 @@ const formModel = ref({
   name: null
 })
 const renderData = ref([]);
+const defaultRequest =
+    {
+      name: null,
+      hardwareSignalEntities: []
+    };
 const createRequest = ref({
   name: null,
   hardwareSignalEntities: []
@@ -435,11 +436,11 @@ const submitAdd = async () => {
       (res) => {
         if (res.code == 20000) {
           Message.success("创建成功")
-          createRequest.value = {};
+          createRequest.value = defaultRequest;
           fetchData();
         } else {
           Message.error("创建失败")
-          createRequest.value = {};
+          createRequest.value = defaultRequest;
         }
       }
   )
@@ -448,7 +449,7 @@ const submitAdd = async () => {
 }
 const cancelAdd = () => {
   showVisible.value = false
-  createRequest.value = {};
+  createRequest.value = defaultRequest;
 }
 const search = async () => {
   console.log(formModel.value);
