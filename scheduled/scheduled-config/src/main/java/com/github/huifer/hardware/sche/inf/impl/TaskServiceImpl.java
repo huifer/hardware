@@ -9,6 +9,9 @@ import com.github.huifer.hardware.sche.entity.RuleEntity.CalcFormulaParamRule;
 import com.github.huifer.hardware.sche.entity.RuleEntity.CalcFormulaRule;
 import com.github.huifer.hardware.sche.entity.TaskEntity;
 import com.github.huifer.hardware.sche.entity.dto.QueryResponse;
+import com.github.huifer.hardware.sche.event.DataCalculationCompletedEvent;
+import com.github.huifer.hardware.sche.event.DataExtractionCompletedEvent;
+import com.github.huifer.hardware.sche.event.DataFilteringCompletedEvent;
 import com.github.huifer.hardware.sche.inf.DataExtractService;
 import com.github.huifer.hardware.sche.inf.TaskService;
 import com.google.gson.Gson;
@@ -25,9 +28,12 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -38,6 +44,7 @@ public class TaskServiceImpl implements TaskService {
   private static final Logger logger = LoggerFactory.getLogger(TaskServiceImpl.class);
   private final MongoTemplate mongoTemplate;
   Gson gson = GsonFactory.getGson();
+  ThreadLocal<String> uid = new ThreadLocal<>();
 
   @Transactional(rollbackFor = {Exception.class})
   @Override
@@ -89,25 +96,32 @@ public class TaskServiceImpl implements TaskService {
     return ruleEntity.getCalc();
   }
 
+  @Autowired
+  private ApplicationEventPublisher applicationEventPublisher;
+
   /**
    * 执行step为true的计算
    **/
   private Map<String, BigDecimal> executeStepTrue(List<RuleEntity> ruleEntitiesTrue,
       Map<String, BigDecimal> fd) {
     Map<String, Object> param = new HashMap<>();
-    fd.forEach((k, v) -> {
-      param.put(k, v);
-    });
+    if (!CollectionUtils.isEmpty(fd)) {
+
+      fd.forEach((k, v) -> {
+        param.put(k, v);
+      });
+    }
     for (RuleEntity ruleEntity : ruleEntitiesTrue) {
       String calc = getCalc(ruleEntity, null);
       if (!org.apache.commons.lang3.StringUtils.isEmpty(calc)) {
-
+        this.applicationEventPublisher.publishEvent(new DataExtractionCompletedEvent());
         Object execute = AviatorEvaluator.execute(calc, param);
 
         // FIXME: 2023/3/17 key值确定
         String name = ruleEntity.getAlias();
         fd.put(name, new BigDecimal(execute.toString()));
         param.put(name, new BigDecimal(execute.toString()));
+        this.applicationEventPublisher.publishEvent(new DataCalculationCompletedEvent());
       } else {
         String name = ruleEntity.getAlias();
         fd.put(name, BigDecimal.ZERO);
@@ -120,6 +134,7 @@ public class TaskServiceImpl implements TaskService {
 
   public Map<String, BigDecimal> execute(List<RuleEntity> ruleEntities,
       DataExtractService extractService) {
+    genUid();
     // 2. 等待 step 为false 的数值计算
     List<RuleEntity> ruleEntitiesFalse = ruleEntities.stream().filter(s -> !s.isStep())
         .toList();
@@ -137,56 +152,6 @@ public class TaskServiceImpl implements TaskService {
         .sorted(Comparator.comparingInt(RuleEntity::getOrder)).collect(Collectors.toList());
 
     return executeStepTrue(collect1, fd);
-  }
-
-  /**
-   * 执行step为false的计算
-   *
-   * @param ruleEntity 规则
-   * @return key: 公式别名，value：公式运算结果
-   */
-  public Map<String, BigDecimal> executeStepFalse(RuleEntity ruleEntity,
-      DataExtractService extractService) {
-    if (!ruleEntity.isStep()) {
-
-      Map<String, QueryEntity> calcParamMappingQuery = ruleEntity.getCalcParamMappingQuery();
-      Map<String, FilterEntity> calcParamFilter = ruleEntity.getCalcParamFilter();
-
-      List<QueryResponse> queryResponses = new ArrayList<>();
-      // 参数和信号映射关系
-      Map<String, String> calcParamMappingSign = new HashMap<>();
-      for (Entry<String, QueryEntity> entry : calcParamMappingQuery.entrySet()) {
-        String k = entry.getKey();
-        QueryEntity v = entry.getValue();
-        QueryResponse extract = extractService.extract(v);
-        if (extract.getReduceTypeEnums() == null) {
-          extract.setReduceTypeEnums(v.getReduceTypeEnums());
-        }
-        QueryResponse filter = extractService.filter(extract, calcParamFilter.get(k));
-        queryResponses.add(filter);
-        calcParamMappingSign.put(k, filter.getSignle());
-      }
-      // key: 公式名称,value 值
-      Map<String, BigDecimal> res = new HashMap<>();
-      // 非步骤运算
-      // 核心计算
-      String calc1 = getCalc(ruleEntity, queryResponses);
-      if (!org.apache.commons.lang3.StringUtils.isEmpty(calc1)) {
-
-        BigDecimal calc = calc(calc1, queryResponses,
-            calcParamMappingSign, ruleEntity.getStaticCalcParam());
-        // FIXME: 2023/3/17 key值确定
-        String name = ruleEntity.getAlias();
-        res.put(name, calc);
-      } else {
-        String name = ruleEntity.getAlias();
-        res.put(name, BigDecimal.ZERO);
-      }
-      return res;
-
-    }
-
-    return null;
   }
 
   // TODO: 2023/3/22 查询结果和计算参数直接的关系处理
@@ -262,5 +227,70 @@ public class TaskServiceImpl implements TaskService {
     } catch (Exception e) {
       return BigDecimal.ZERO;
     }
+  }
+
+  /**
+   * 执行step为false的计算
+   *
+   * @param ruleEntity 规则
+   * @return key: 公式别名，value：公式运算结果
+   */
+  public Map<String, BigDecimal> executeStepFalse(RuleEntity ruleEntity,
+      DataExtractService extractService) {
+    if (!ruleEntity.isStep()) {
+
+      Map<String, QueryEntity> calcParamMappingQuery = ruleEntity.getCalcParamMappingQuery();
+      Map<String, FilterEntity> calcParamFilter = ruleEntity.getCalcParamFilter();
+
+      List<QueryResponse> queryResponses = new ArrayList<>();
+      // 参数和信号映射关系
+      Map<String, String> calcParamMappingSign = new HashMap<>();
+      for (Entry<String, QueryEntity> entry : calcParamMappingQuery.entrySet()) {
+        String k = entry.getKey();
+        QueryEntity v = entry.getValue();
+        QueryResponse extract = extractService.extract(v);
+        // 数据提取完成
+        this.applicationEventPublisher.publishEvent(new DataExtractionCompletedEvent());
+        if (extract.getReduceTypeEnums() == null) {
+          extract.setReduceTypeEnums(v.getReduceTypeEnums());
+        }
+        QueryResponse filter = extractService.filter(extract, calcParamFilter.get(k));
+        // 数据过滤完成
+        this.applicationEventPublisher.publishEvent(new DataFilteringCompletedEvent());
+        queryResponses.add(filter);
+        calcParamMappingSign.put(k, filter.getSignle());
+      }
+      // key: 公式名称,value 值
+      Map<String, BigDecimal> res = new HashMap<>();
+      // 非步骤运算
+      // 核心计算
+      String calc1 = getCalc(ruleEntity, queryResponses);
+      if (!org.apache.commons.lang3.StringUtils.isEmpty(calc1)) {
+
+        BigDecimal calc = calc(calc1, queryResponses,
+            calcParamMappingSign, ruleEntity.getStaticCalcParam());
+        // 数据计算完成
+        this.applicationEventPublisher.publishEvent(new DataCalculationCompletedEvent());
+        // FIXME: 2023/3/17 key值确定
+        String name = ruleEntity.getAlias();
+        res.put(name, calc);
+      } else {
+        String name = ruleEntity.getAlias();
+        res.put(name, BigDecimal.ZERO);
+      }
+      return res;
+
+    }
+
+    return null;
+  }
+
+  private void genUid() {
+    uid.remove();
+    uid.set(UUID.randomUUID().toString());
+  }
+
+  private String getUid() {
+    return uid.get();
   }
 }
