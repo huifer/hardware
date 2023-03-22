@@ -107,6 +107,20 @@ public class HardwareTypeEntityServiceImpl implements HardwareTypeEntityService 
   }
 
   @Override
+  public List<HardwareTypeEntity> list(HardwareTypeQuery query) {
+    Query query1 = new Query();
+    query1.addCriteria(Criteria.where(Fields.deleted).is(false));
+
+    if (!org.apache.commons.lang3.StringUtils.isEmpty(query.getName())) {
+      query1.addCriteria(Criteria.where(Fields.name).regex(query.getName()));
+    }
+    List<HardwareTypeEntity> hardwareTypeEntities = mongoTemplate.find(query1,
+        HardwareTypeEntity.class);
+
+    return hardwareTypeEntities;
+  }
+
+  @Override
   public HardwareTypeEntity findById(String id) {
     return hardwareTypeEntityRepository.findById(id).orElse(null);
   }

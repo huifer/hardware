@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.FieldNameConstants;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -17,6 +18,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @ToString
 @Document("hardware_info")
+@FieldNameConstants
 public class HardwareInfoEntity implements Serializable {
 
   @Id
@@ -53,7 +55,7 @@ public class HardwareInfoEntity implements Serializable {
   /**
    * 是否删除
    **/
-  private boolean deleted;
+  private boolean deleted = false;
   private LocalDateTime createTime;
 
 }

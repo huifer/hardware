@@ -4,6 +4,7 @@ import com.github.huifer.hardware.common.base.PageAndSortRequest;
 import com.github.huifer.hardware.common.base.PageResponse;
 import com.github.huifer.hardware.information.entity.HardwareTypeEntity;
 import com.github.huifer.hardware.information.servlet.HardwareTypeQuery;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -18,4 +19,6 @@ public interface HardwareTypeEntityService {
   PageResponse<HardwareTypeEntity> page(PageAndSortRequest page , HardwareTypeQuery query);
 
   HardwareTypeEntity findById(String id);
+
+  List<HardwareTypeEntity> list(HardwareTypeQuery query);
 }

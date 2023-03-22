@@ -6,6 +6,7 @@ import com.github.huifer.hardware.common.base.ResultResponse;
 import com.github.huifer.hardware.information.entity.HardwareSignMappingEntity;
 import com.github.huifer.hardware.information.service.HardwareSignMappingEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 @RequestMapping("hardware_sign_mapping")
 @RestController
+@CrossOrigin
 public class HardwareSignMappingEntityCtr {
 
   private final HardwareSignMappingEntityService hardwareSignMappingEntityService;

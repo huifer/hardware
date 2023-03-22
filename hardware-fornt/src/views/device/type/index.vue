@@ -150,19 +150,23 @@
                 <a-input v-model="createRequest.hardwareSignalEntities[rowIndex].name"/>
               </template>
               <template #sysKey="{ rowIndex }">
-                <a-input v-model="createRequest.hardwareSignalEntities[rowIndex].sysKey" />
+                <a-input v-model="createRequest.hardwareSignalEntities[rowIndex].sysKey"/>
               </template>
               <template #min="{ rowIndex }">
-                <a-input-number :step="0.1" v-model="createRequest.hardwareSignalEntities[rowIndex].min"/>
+                <a-input-number v-model="createRequest.hardwareSignalEntities[rowIndex].min"
+                                :step="0.1"/>
               </template>
               <template #max="{ rowIndex }">
-                <a-input-number :step="0.1" v-model="createRequest.hardwareSignalEntities[rowIndex].max"/>
+                <a-input-number v-model="createRequest.hardwareSignalEntities[rowIndex].max"
+                                :step="0.1"/>
               </template>
               <template #defaultWaringMin="{ rowIndex }">
-                <a-input-number :step="0.1" v-model="createRequest.hardwareSignalEntities[rowIndex].defaultWaringMin"/>
+                <a-input-number v-model="createRequest.hardwareSignalEntities[rowIndex].defaultWaringMin"
+                                :step="0.1"/>
               </template>
               <template #defaultWaringMax="{ rowIndex }">
-                <a-input-number :step="0.1" v-model="createRequest.hardwareSignalEntities[rowIndex].defaultWaringMax"/>
+                <a-input-number v-model="createRequest.hardwareSignalEntities[rowIndex].defaultWaringMax"
+                                :step="0.1"/>
               </template>
 
               <template #operations="{rowIndex}">
@@ -177,8 +181,8 @@
     </a-modal>
 
 
-
-    <a-modal v-model:visible="showUpdateVisible" width="60%" @cancel="cancelUpdate" @ok="submitUpdate">
+    <a-modal v-model:visible="showUpdateVisible" width="60%" @cancel="cancelUpdate"
+             @ok="submitUpdate">
       <template #title>
         修改硬件类型
       </template>
@@ -223,19 +227,23 @@
                 <a-input v-model="updateRequest.hardwareSignalEntities[rowIndex].name"/>
               </template>
               <template #sysKey="{ rowIndex }">
-                <a-input v-model="updateRequest.hardwareSignalEntities[rowIndex].sysKey" />
+                <a-input v-model="updateRequest.hardwareSignalEntities[rowIndex].sysKey"/>
               </template>
               <template #min="{ rowIndex }">
-                <a-input-number :step="0.1" v-model="updateRequest.hardwareSignalEntities[rowIndex].min"/>
+                <a-input-number v-model="updateRequest.hardwareSignalEntities[rowIndex].min"
+                                :step="0.1"/>
               </template>
               <template #max="{ rowIndex }">
-                <a-input-number :step="0.1" v-model="updateRequest.hardwareSignalEntities[rowIndex].max"/>
+                <a-input-number v-model="updateRequest.hardwareSignalEntities[rowIndex].max"
+                                :step="0.1"/>
               </template>
               <template #defaultWaringMin="{ rowIndex }">
-                <a-input-number :step="0.1" v-model="updateRequest.hardwareSignalEntities[rowIndex].defaultWaringMin"/>
+                <a-input-number v-model="updateRequest.hardwareSignalEntities[rowIndex].defaultWaringMin"
+                                :step="0.1"/>
               </template>
               <template #defaultWaringMax="{ rowIndex }">
-                <a-input-number :step="0.1" v-model="updateRequest.hardwareSignalEntities[rowIndex].defaultWaringMax"/>
+                <a-input-number v-model="updateRequest.hardwareSignalEntities[rowIndex].defaultWaringMax"
+                                :step="0.1"/>
               </template>
 
               <template #operations="{rowIndex}">
@@ -260,7 +268,7 @@
             <a-row :gutter="80">
 
               <a-col :span="8">
-                  <span>名称: {{byId.name}}</span>
+                <span>名称: {{ byId.name }}</span>
               </a-col>
             </a-row>
 
@@ -278,7 +286,7 @@
 
 <script lang="ts" setup>
 import {Pagination} from '@/types/global';
-import {computed, onMounted, reactive, ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import {
   HardwareTypeById,
   HardwareTypeCreate,
@@ -353,7 +361,8 @@ const columnsAdd = [
     dataIndex: 'operations',
     slotName: 'operations',
   },
-];const showCol = [
+];
+const showCol = [
   {
     title: '信号名称',
     dataIndex: 'name',
@@ -393,10 +402,10 @@ const updateRequest = ref({
   name: null,
   hardwareSignalEntities: []
 });
-const delArow = (recode) =>{
+const delArow = (recode) => {
   createRequest.value.hardwareSignalEntities.splice(recode, 1);
 }
-const delForUpdateArow = (recode)=>{
+const delForUpdateArow = (recode) => {
   updateRequest.value.hardwareSignalEntities.splice(recode, 1);
 }
 const addForUpdateRow = () => {
@@ -477,10 +486,10 @@ const fetchData = async () => {
 const showAdd = async () => {
   showVisible.value = true;
 }
-const cancelUpdate = ()=>{
+const cancelUpdate = () => {
   updateRequest.value = {}
 }
-const submitUpdate = async ()=>{
+const submitUpdate = async () => {
   await HardwareTypeUpdate(updateRequest.value);
   updateRequest.value = {}
   showUpdateVisible.value = false;
@@ -492,7 +501,7 @@ const show = async (recode) => {
   showViewVisible.value = true
 
 }
-const showSee = ()=>{
+const showSee = () => {
   byId.value = {}
   showViewVisible.value = false;
 }

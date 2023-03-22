@@ -14,7 +14,6 @@ import lombok.ToString;
 public class HardwareInfoQuery {
 
   private String deviceName;
-  private String deviceType;
 
   private String deviceId;
   private String uid;

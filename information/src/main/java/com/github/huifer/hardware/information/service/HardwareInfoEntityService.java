@@ -1,5 +1,7 @@
 package com.github.huifer.hardware.information.service;
 
+import com.github.huifer.hardware.common.base.PageAndSortRequest;
+import com.github.huifer.hardware.common.base.PageResponse;
 import com.github.huifer.hardware.information.entity.HardwareInfoEntity;
 import com.github.huifer.hardware.information.entity.HardwareTypeEntity;
 import com.github.huifer.hardware.information.servlet.HardwareInfoQuery;
@@ -15,6 +17,7 @@ public interface HardwareInfoEntityService {
 
   void delete(String id);
 
-  Page<HardwareInfoEntity> page(Pageable pageable, HardwareInfoQuery query);
+  PageResponse<HardwareInfoEntity> page(PageAndSortRequest page, HardwareInfoQuery query);
 
+  HardwareInfoEntity byId(String id);
 }
