@@ -47,6 +47,18 @@ public class TaskServiceImpl implements TaskService {
 
 
   /**
+   * 计算公式计算器
+   *
+   * @param ruleEntity
+   * @return
+   */
+  private static String getCalc(RuleEntity ruleEntity, List<QueryResponse> responses) {
+    // TODO: 2023/3/22 计算规则
+
+    return ruleEntity.getCalc();
+  }
+
+  /**
    * 执行step为true的计算
    **/
   private Map<String, BigDecimal> executeStepTrue(List<RuleEntity> ruleEntitiesTrue,
@@ -55,13 +67,22 @@ public class TaskServiceImpl implements TaskService {
     fd.forEach((k, v) -> {
       param.put(k, v);
     });
-
     for (RuleEntity ruleEntity : ruleEntitiesTrue) {
-      Object execute = AviatorEvaluator.execute(ruleEntity.getCalc(), param);
-      // FIXME: 2023/3/17 key值确定
-      String name = ruleEntity.getAlias();
-      fd.put(name, new BigDecimal(execute.toString()));
-      param.put(name, new BigDecimal(execute.toString()));
+      String calc = getCalc(ruleEntity, null);
+      if (!org.apache.commons.lang3.StringUtils.isEmpty(calc)) {
+
+        Object execute = AviatorEvaluator.execute(calc, param);
+
+        // FIXME: 2023/3/17 key值确定
+        String name = ruleEntity.getAlias();
+        fd.put(name, new BigDecimal(execute.toString()));
+        param.put(name, new BigDecimal(execute.toString()));
+      } else {
+        String name = ruleEntity.getAlias();
+        fd.put(name, BigDecimal.ZERO);
+        param.put(name, BigDecimal.ZERO);
+
+      }
     }
     return fd;
   }
@@ -118,12 +139,20 @@ public class TaskServiceImpl implements TaskService {
       Map<String, BigDecimal> res = new HashMap<>();
       // 非步骤运算
       // 核心计算
-      BigDecimal calc = calc(ruleEntity.getCalc(), queryResponses,
-          calcParamMappingSign);
-      // FIXME: 2023/3/17 key值确定
-      String name = ruleEntity.getAlias();
-      res.put(name, calc);
+      String calc1 = getCalc(ruleEntity, queryResponses);
+      if (!org.apache.commons.lang3.StringUtils.isEmpty(calc1)) {
+
+        BigDecimal calc = calc(calc1, queryResponses,
+            calcParamMappingSign);
+        // FIXME: 2023/3/17 key值确定
+        String name = ruleEntity.getAlias();
+        res.put(name, calc);
+      } else {
+        String name = ruleEntity.getAlias();
+        res.put(name, BigDecimal.ZERO);
+      }
       return res;
+
     }
 
     return null;

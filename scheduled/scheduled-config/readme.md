@@ -124,16 +124,23 @@ public interface TaskService {
 
 核心参数`RuleEntity`结构如下
 
-| 字段名称             | 字段类型            | 字段说明                                 |
-| -------------------- | ------------------- | ---------------------------------------- |
-| name                 | String              | 公式名称（中文）                         |
-| alias                | String              | 公式别名（常用于步骤计算中的临时变量）   |
-| calc                 | String              | 公式表达式，需要符合google aviator要求   |
-| calcParam            | List<String>        | 公式中出现的参数，可以超过公式中所需参数 |
-| calcParamMappingSign | Map<String, String> | 公式                                     |
-|                      |                     |                                          |
-|                      |                     |                                          |
-|                      |                     |                                          |
+| 字段名称              | 字段类型                  | 字段说明                                 |
+| --------------------- | ------------------------- | ---------------------------------------- |
+| name                  | String                    | 公式名称（中文）                         |
+| alias                 | String                    | 公式别名（常用于步骤计算中的临时变量）   |
+| calc                  | String                    | 公式表达式，需要符合google aviator要求   |
+| calcParam             | List<String>              | 公式中出现的参数，可以超过公式中所需参数 |
+| step                  | boolean                   | 是否是步骤运算                           |
+| order                 | int                       | 步骤运算的先后顺序                       |
+| calcParamMappingQuery | Map<String, QueryEntity>  | key:公式中的参数，value：查询条件        |
+| calcParamFilter       | Map<String, FilterEntity> | key:公式中的参数，value：过滤条件        |
 
 
+
+运算核心流程：
+
+1.   将`RuleEntity`根据`step`字段进行分组
+2.   计算`step`字段为false的数据，将结果存储在Map容器中，存储结构：key：公式别名，value：公式计算值
+3.   排序`step`字段为true的数据，从小到大。
+4.   将第2步中的数据带入计算的到结果。步骤运算仅限使用step为false的数据进行计算。
 

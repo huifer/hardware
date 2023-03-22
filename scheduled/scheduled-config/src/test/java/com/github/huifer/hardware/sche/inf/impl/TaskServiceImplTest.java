@@ -63,7 +63,7 @@ class TaskServiceImplTest {
     ArrayList<String> calcParam = new ArrayList<>();
     calcParam.add("s1");
     calcParam.add("s2");
-    e.setCalcParam(calcParam);
+    e.setCalcParams(calcParam);
 
     e.setStep(true);
     e.setOrder(2);
@@ -77,7 +77,7 @@ class TaskServiceImplTest {
     e.setCalc("s1+1");
     ArrayList<String> calcParam = new ArrayList<>();
     calcParam.add("s1");
-    e.setCalcParam(calcParam);
+    e.setCalcParams(calcParam);
 
     e.setStep(true);
     e.setOrder(1);
@@ -89,7 +89,7 @@ class TaskServiceImplTest {
     e.setName("公式一");
     e.setAlias("s1");
     e.setCalc("math.sqrt(a+b)");
-    e.setCalcParam(Arrays.stream(new String[]{"a", "b"}).toList());
+    e.setCalcParams(Arrays.stream(new String[]{"a", "b"}).toList());
     e.setStep(false);
     HashMap<String, QueryEntity> calcParamMappingQuery = new HashMap<>();
     QueryEntity value = new QueryEntity();

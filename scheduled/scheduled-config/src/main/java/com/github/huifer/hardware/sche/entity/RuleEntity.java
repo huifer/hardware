@@ -1,14 +1,17 @@
 package com.github.huifer.hardware.sche.entity;
 
-import com.github.huifer.hardware.common.enums.ReduceTypeEnums;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.FieldNameConstants;
 import org.springframework.data.annotation.Id;
 
 /**
@@ -40,7 +43,7 @@ public class RuleEntity implements Serializable {
   /**
    * 公式所需参数
    **/
-  private List<String> calcParam;
+  private List<String> calcParams;
 
   /**
    * 是否是阶段运算值，如果是则需要等最后运算
@@ -59,5 +62,84 @@ public class RuleEntity implements Serializable {
    * 计算优先级，和step有关
    **/
   private int order;
+
+  /**
+   * 数学公式集合
+   **/
+  private List<CalcFormulaRule> calcFormulaRule;
+
+  @Getter
+  @Setter
+  @NoArgsConstructor
+  @AllArgsConstructor
+  @FieldNameConstants
+  @EqualsAndHashCode
+  @ToString
+  private static class CalcFormulaRule {
+
+    /**
+     * 数学公式
+     **/
+    private String calc;
+    private List<CalcFormulaParamRule> calcFormulaParamRules;
+  }
+
+  /**
+   * 公式参数区间条件
+   **/
+  @Getter
+  @Setter
+  @NoArgsConstructor
+  @AllArgsConstructor
+  @FieldNameConstants
+  @EqualsAndHashCode
+  @ToString
+  private static class CalcFormulaParamRule {
+
+    /**
+     * 公式参数
+     */
+    private String calcParam;
+
+    /**
+     * 区间
+     */
+    private List<BigRange> ranges;
+
+
+    /**
+     * 判断 min <= source <= max
+     **/
+    public static boolean between(BigDecimal source, BigDecimal max, BigDecimal min) {
+      return (source.compareTo(max) < 1) &&
+          (source.compareTo(min) > -1);
+    }
+
+    public boolean ignore(BigDecimal source) {
+      if (ranges != null) {
+        List<Boolean> booleans = new ArrayList<>();
+
+        for (BigRange range : ranges) {
+          booleans.add(between(source, range.getMax(), range.getMin()));
+        }
+        return !booleans.contains(true);
+      } else {
+        return false;
+      }
+      // 如果true不在里面则表示数据需要忽略
+    }
+
+  }
+
+  @Getter
+  @Setter
+  @NoArgsConstructor
+  @AllArgsConstructor
+  @ToString
+  public static class BigRange {
+
+    private BigDecimal max;
+    private BigDecimal min;
+  }
 
 }
