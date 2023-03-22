@@ -75,7 +75,7 @@ public class RuleEntity implements Serializable {
   @FieldNameConstants
   @EqualsAndHashCode
   @ToString
-  private static class CalcFormulaRule {
+  public static class CalcFormulaRule {
 
     /**
      * 数学公式
@@ -94,7 +94,7 @@ public class RuleEntity implements Serializable {
   @FieldNameConstants
   @EqualsAndHashCode
   @ToString
-  private static class CalcFormulaParamRule {
+  public static class CalcFormulaParamRule {
 
     /**
      * 公式参数
@@ -110,12 +110,12 @@ public class RuleEntity implements Serializable {
     /**
      * 判断 min <= source <= max
      **/
-    public static boolean between(BigDecimal source, BigDecimal max, BigDecimal min) {
+    private boolean between(BigDecimal source, BigDecimal max, BigDecimal min) {
       return (source.compareTo(max) < 1) &&
           (source.compareTo(min) > -1);
     }
 
-    public boolean ignore(BigDecimal source) {
+    public boolean between(BigDecimal source) {
       if (ranges != null) {
         List<Boolean> booleans = new ArrayList<>();
 

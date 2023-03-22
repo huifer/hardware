@@ -124,16 +124,31 @@ public interface TaskService {
 
 核心参数`RuleEntity`结构如下
 
-| 字段名称              | 字段类型                  | 字段说明                                 |
-| --------------------- | ------------------------- | ---------------------------------------- |
-| name                  | String                    | 公式名称（中文）                         |
-| alias                 | String                    | 公式别名（常用于步骤计算中的临时变量）   |
-| calc                  | String                    | 公式表达式，需要符合google aviator要求   |
-| calcParam             | List<String>              | 公式中出现的参数，可以超过公式中所需参数 |
-| step                  | boolean                   | 是否是步骤运算                           |
-| order                 | int                       | 步骤运算的先后顺序                       |
-| calcParamMappingQuery | Map<String, QueryEntity>  | key:公式中的参数，value：查询条件        |
-| calcParamFilter       | Map<String, FilterEntity> | key:公式中的参数，value：过滤条件        |
+| 字段名称              | 字段类型                  | 字段说明                                                     |
+| --------------------- | ------------------------- | ------------------------------------------------------------ |
+| name                  | String                    | 公式名称（中文）                                             |
+| alias                 | String                    | 公式别名（常用于步骤计算中的临时变量）                       |
+| calc                  | String                    | 公式表达式，需要符合google aviator要求(如果没有规则运算填写，规则运算是指当XXX大于某一个值的时候用一个公式，反之则用另一个公式) |
+| calcParam             | List<String>              | 公式中出现的参数，可以超过公式中所需参数                     |
+| step                  | boolean                   | 是否是步骤运算                                               |
+| order                 | int                       | 步骤运算的先后顺序                                           |
+| calcParamMappingQuery | Map<String, QueryEntity>  | key:公式中的参数，value：查询条件                            |
+| calcParamFilter       | Map<String, FilterEntity> | key:公式中的参数，value：过滤条件                            |
+| calcFormulaRule       | List<CalcFormulaRule>     | 数学公式集合（需要通过该集合判断所需使用的公式）             |
+
+`CalcFormulaRule` 结构如下
+
+| 字段名称              | 字段类型                   | 字段说明         |
+| --------------------- | -------------------------- | ---------------- |
+| calc                  | String                     | 数学公式         |
+| calcFormulaParamRules | List<CalcFormulaParamRule> | 公式参数区间条件 |
+
+`CalcFormulaParamRule`结构如下
+
+| 字段名称  | 字段类型       | 字段说明         |
+| --------- | -------------- | ---------------- |
+| calcParam | String         | 公式内的参数名称 |
+| ranges    | List<BigRange> | 参数区间范围     |
 
 
 
@@ -144,3 +159,8 @@ public interface TaskService {
 3.   排序`step`字段为true的数据，从小到大。
 4.   将第2步中的数据带入计算的到结果。步骤运算仅限使用step为false的数据进行计算。
 
+公式提取流程：
+
+1.   通过`DataExtractService`配合`RuleEntity`中的`calcParamMappingQuery`查询公式参数和运算原始数据集合。
+2.   将第一步中的数据根据公式参数分组。并且将数据配合`ReduceTypeEnums`进行归并。
+3.   遍历`calcFormulaRule`将第2步中的数据就那些判断，如果命中则将公式返回。注意：目前公式只会有一个结果。

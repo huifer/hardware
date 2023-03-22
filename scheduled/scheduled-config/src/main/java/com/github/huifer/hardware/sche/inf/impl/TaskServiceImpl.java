@@ -5,6 +5,8 @@ import com.github.huifer.hardware.common.utils.GsonFactory;
 import com.github.huifer.hardware.sche.entity.FilterEntity;
 import com.github.huifer.hardware.sche.entity.QueryEntity;
 import com.github.huifer.hardware.sche.entity.RuleEntity;
+import com.github.huifer.hardware.sche.entity.RuleEntity.CalcFormulaParamRule;
+import com.github.huifer.hardware.sche.entity.RuleEntity.CalcFormulaRule;
 import com.github.huifer.hardware.sche.entity.TaskEntity;
 import com.github.huifer.hardware.sche.entity.dto.QueryResponse;
 import com.github.huifer.hardware.sche.inf.DataExtractService;
@@ -16,16 +18,19 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 public class TaskServiceImpl implements TaskService {
 
@@ -52,9 +57,35 @@ public class TaskServiceImpl implements TaskService {
    * @param ruleEntity
    * @return
    */
-  private static String getCalc(RuleEntity ruleEntity, List<QueryResponse> responses) {
+  private String getCalc(RuleEntity ruleEntity, List<QueryResponse> responses) {
     // TODO: 2023/3/22 计算规则
+    // 1. 将数据归并
+    Map<String, BigDecimal> bigDecimalMap = new HashMap<>();
+    if (!CollectionUtils.isEmpty(responses)) {
+      for (QueryResponse respons : responses) {
+        BigDecimal reduce = reduce(respons.getReduceTypeEnums(), respons.getData());
+        bigDecimalMap.put(respons.getSignle(), reduce);
+      }
+    }
+    // 2. 归并后数据确认公式
+    List<CalcFormulaRule> calcFormulaRule = ruleEntity.getCalcFormulaRule();
+    if (!CollectionUtils.isEmpty(calcFormulaRule)) {
 
+      for (CalcFormulaRule formulaRule : calcFormulaRule) {
+        List<CalcFormulaParamRule> calcFormulaParamRules = formulaRule.getCalcFormulaParamRules();
+
+        Set<Boolean> booleans = new HashSet<>();
+        for (CalcFormulaParamRule calcFormulaParamRule : calcFormulaParamRules) {
+          String calcParam = calcFormulaParamRule.getCalcParam();
+          boolean between = calcFormulaParamRule.between(bigDecimalMap.get(calcParam));
+          booleans.add(between);
+        }
+        if (booleans.size() == 1 && booleans.contains(true)) {
+          return formulaRule.getCalc();
+        }
+
+      }
+    }
     return ruleEntity.getCalc();
   }
 
