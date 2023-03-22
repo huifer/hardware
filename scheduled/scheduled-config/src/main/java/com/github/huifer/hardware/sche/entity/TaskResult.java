@@ -41,4 +41,6 @@ public class TaskResult implements Serializable {
    * 计算时间
    */
   private String calcRunTime;
+
+
 }

@@ -59,6 +59,10 @@ public class RuleEntity implements Serializable {
    **/
   private Map<String, FilterEntity> calcParamFilter;
   /**
+   * 公式中的静态参数
+   **/
+  private Map<String, BigDecimal> staticCalcParam;
+  /**
    * 计算优先级，和step有关
    **/
   private int order;

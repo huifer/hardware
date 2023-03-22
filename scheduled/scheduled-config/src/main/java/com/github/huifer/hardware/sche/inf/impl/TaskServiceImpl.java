@@ -174,7 +174,7 @@ public class TaskServiceImpl implements TaskService {
       if (!org.apache.commons.lang3.StringUtils.isEmpty(calc1)) {
 
         BigDecimal calc = calc(calc1, queryResponses,
-            calcParamMappingSign);
+            calcParamMappingSign, ruleEntity.getStaticCalcParam());
         // FIXME: 2023/3/17 key值确定
         String name = ruleEntity.getAlias();
         res.put(name, calc);
@@ -191,7 +191,7 @@ public class TaskServiceImpl implements TaskService {
 
   // TODO: 2023/3/22 查询结果和计算参数直接的关系处理
   private BigDecimal calc(String calc, List<QueryResponse> response,
-      Map<String, String> calcParamMappingSign) {
+      Map<String, String> calcParamMappingSign, Map<String, BigDecimal> staticCalcParam) {
     Map<String, Object> bigDecimalMap = new HashMap<>();
 
     for (Entry<String, String> entry : calcParamMappingSign.entrySet()) {
@@ -200,16 +200,17 @@ public class TaskServiceImpl implements TaskService {
       QueryResponse query = selectCalcData(response, v);
       bigDecimalMap.put(k, reduce(query.getReduceTypeEnums(), query.getData()));
     }
+    if (staticCalcParam != null) {
+      bigDecimalMap.putAll(staticCalcParam);
+    }
 
     try {
 
       Object execute = AviatorEvaluator.execute(calc, bigDecimalMap);
       return new BigDecimal(execute.toString());
     } catch (Exception e) {
-      if (logger.isInfoEnabled()) {
-        logger.error("calc,calc = {}, response = {}, calcParamMappingSign = {}", gson.toJson(calc),
-            gson.toJson(response), gson.toJson(calcParamMappingSign));
-      }
+      logger.error("calc,calc = {}, response = {}, calcParamMappingSign = {}", gson.toJson(calc),
+          gson.toJson(response), gson.toJson(calcParamMappingSign));
       logger.error("计算异常 ", e);
     }
     return BigDecimal.ZERO;
