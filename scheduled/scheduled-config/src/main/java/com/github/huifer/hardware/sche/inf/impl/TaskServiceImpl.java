@@ -1,12 +1,15 @@
 package com.github.huifer.hardware.sche.inf.impl;
 
 import com.github.huifer.hardware.common.enums.ReduceTypeEnums;
+import com.github.huifer.hardware.common.utils.GsonFactory;
 import com.github.huifer.hardware.sche.entity.FilterEntity;
 import com.github.huifer.hardware.sche.entity.QueryEntity;
 import com.github.huifer.hardware.sche.entity.RuleEntity;
 import com.github.huifer.hardware.sche.entity.TaskEntity;
 import com.github.huifer.hardware.sche.entity.dto.QueryResponse;
-import com.github.huifer.hardware.sche.inf.TaskNoStepService;
+import com.github.huifer.hardware.sche.inf.DataExtractService;
+import com.github.huifer.hardware.sche.inf.TaskService;
+import com.google.gson.Gson;
 import com.googlecode.aviator.AviatorEvaluator;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -24,15 +27,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
-public class TaskNoStepServiceImpl implements TaskNoStepService {
+public class TaskServiceImpl implements TaskService {
 
 
-  private static final Logger logger = LoggerFactory.getLogger(TaskNoStepServiceImpl.class);
+  private static final Logger logger = LoggerFactory.getLogger(TaskServiceImpl.class);
   private final MongoTemplate mongoTemplate;
-
-  public TaskNoStepServiceImpl(MongoTemplate mongoTemplate) {
-    this.mongoTemplate = mongoTemplate;
-  }
+  Gson gson = GsonFactory.getGson();
 
   @Transactional(rollbackFor = {Exception.class})
   @Override
@@ -40,43 +40,11 @@ public class TaskNoStepServiceImpl implements TaskNoStepService {
     this.mongoTemplate.save(taskEntity, "task");
   }
 
-  @Override
-  public QueryResponse extract(QueryEntity query) {
-    QueryResponse res = new QueryResponse();
-    // 这段代码必须写，他用来做数据归并用
-    res.setReduceTypeEnums(query.getReduceTypeEnums());
 
-    return res;
+  public TaskServiceImpl(MongoTemplate mongoTemplate) {
+    this.mongoTemplate = mongoTemplate;
   }
 
-  @Override
-  public QueryResponse filter(QueryResponse data,
-      List<FilterEntity> filter) {
-    return null;
-  }
-
-  @Override
-  public Map<String, BigDecimal> execute(List<RuleEntity> ruleEntities) {
-
-    // 2. 等待 step 为false 的数值计算
-    List<RuleEntity> ruleEntitiesFalse = ruleEntities.stream().filter(s -> !s.isStep())
-        .toList();
-
-    Map<String, BigDecimal> fd = new HashMap<>();
-    for (RuleEntity ruleEntity : ruleEntitiesFalse) {
-      Map<String, BigDecimal> bigDecimalMap = executeStepFalse(ruleEntity);
-      fd.putAll(bigDecimalMap);
-    }
-    // 3. 计算 step 为 true 的数值
-    List<RuleEntity> collect = ruleEntities.stream().filter(RuleEntity::isStep)
-        .toList();
-
-    List<RuleEntity> collect1 = collect.stream()
-        .sorted(Comparator.comparingInt(RuleEntity::getOrder)).collect(Collectors.toList());
-    Map<String, BigDecimal> bigDecimalMap = executeStepTrue(collect1, fd);
-
-    return bigDecimalMap;
-  }
 
   /**
    * 执行step为true的计算
@@ -98,28 +66,60 @@ public class TaskNoStepServiceImpl implements TaskNoStepService {
     return fd;
   }
 
+  public Map<String, BigDecimal> execute(List<RuleEntity> ruleEntities,
+      DataExtractService extractService) {
+    // 2. 等待 step 为false 的数值计算
+    List<RuleEntity> ruleEntitiesFalse = ruleEntities.stream().filter(s -> !s.isStep())
+        .toList();
+
+    Map<String, BigDecimal> fd = new HashMap<>();
+    for (RuleEntity ruleEntity : ruleEntitiesFalse) {
+      Map<String, BigDecimal> bigDecimalMap = executeStepFalse(ruleEntity, extractService);
+      fd.putAll(bigDecimalMap);
+    }
+    // 3. 计算 step 为 true 的数值
+    List<RuleEntity> collect = ruleEntities.stream().filter(RuleEntity::isStep)
+        .toList();
+
+    List<RuleEntity> collect1 = collect.stream()
+        .sorted(Comparator.comparingInt(RuleEntity::getOrder)).collect(Collectors.toList());
+
+    return executeStepTrue(collect1, fd);
+  }
+
   /**
    * 执行step为false的计算
    *
    * @param ruleEntity 规则
    * @return key: 公式别名，value：公式运算结果
    */
-  public Map<String, BigDecimal> executeStepFalse(RuleEntity ruleEntity) {
+  public Map<String, BigDecimal> executeStepFalse(RuleEntity ruleEntity,
+      DataExtractService extractService) {
     if (!ruleEntity.isStep()) {
 
       Map<String, QueryEntity> calcParamMappingQuery = ruleEntity.getCalcParamMappingQuery();
-      Map<String, List<FilterEntity>> calcParamFilter = ruleEntity.getCalcParamFilter();
+      Map<String, FilterEntity> calcParamFilter = ruleEntity.getCalcParamFilter();
 
       List<QueryResponse> queryResponses = new ArrayList<>();
-      calcParamMappingQuery.forEach((k, v) -> {
-        queryResponses.add(filter(extract(v), calcParamFilter.get(k)));
-      });
+      // 参数和信号映射关系
+      Map<String, String> calcParamMappingSign = new HashMap<>();
+      for (Entry<String, QueryEntity> entry : calcParamMappingQuery.entrySet()) {
+        String k = entry.getKey();
+        QueryEntity v = entry.getValue();
+        QueryResponse extract = extractService.extract(v);
+        if (extract.getReduceTypeEnums() == null) {
+          extract.setReduceTypeEnums(v.getReduceTypeEnums());
+        }
+        QueryResponse filter = extractService.filter(extract, calcParamFilter.get(k));
+        queryResponses.add(filter);
+        calcParamMappingSign.put(k, filter.getSignle());
+      }
       // key: 公式名称,value 值
       Map<String, BigDecimal> res = new HashMap<>();
       // 非步骤运算
       // 核心计算
       BigDecimal calc = calc(ruleEntity.getCalc(), queryResponses,
-          ruleEntity.getCalcParamMappingSign());
+          calcParamMappingSign);
       // FIXME: 2023/3/17 key值确定
       String name = ruleEntity.getAlias();
       res.put(name, calc);
@@ -129,6 +129,7 @@ public class TaskNoStepServiceImpl implements TaskNoStepService {
     return null;
   }
 
+  // TODO: 2023/3/22 查询结果和计算参数直接的关系处理
   private BigDecimal calc(String calc, List<QueryResponse> response,
       Map<String, String> calcParamMappingSign) {
     Map<String, Object> bigDecimalMap = new HashMap<>();
@@ -140,8 +141,18 @@ public class TaskNoStepServiceImpl implements TaskNoStepService {
       bigDecimalMap.put(k, reduce(query.getReduceTypeEnums(), query.getData()));
     }
 
-    Object execute = AviatorEvaluator.execute(calc, bigDecimalMap);
-    return new BigDecimal(execute.toString());
+    try {
+
+      Object execute = AviatorEvaluator.execute(calc, bigDecimalMap);
+      return new BigDecimal(execute.toString());
+    } catch (Exception e) {
+      if (logger.isInfoEnabled()) {
+        logger.error("calc,calc = {}, response = {}, calcParamMappingSign = {}", gson.toJson(calc),
+            gson.toJson(response), gson.toJson(calcParamMappingSign));
+      }
+      logger.error("计算异常 ", e);
+    }
+    return BigDecimal.ZERO;
   }
 
   private QueryResponse selectCalcData(List<QueryResponse> response, String v) {

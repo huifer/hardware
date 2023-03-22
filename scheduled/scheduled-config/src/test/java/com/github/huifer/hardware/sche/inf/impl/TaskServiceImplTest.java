@@ -6,7 +6,8 @@ import com.github.huifer.hardware.sche.entity.QueryEntity;
 import com.github.huifer.hardware.sche.entity.RuleEntity;
 import com.github.huifer.hardware.sche.entity.TaskEntity;
 import com.github.huifer.hardware.sche.entity.dto.QueryResponse;
-import com.github.huifer.hardware.sche.inf.TaskNoStepService;
+import com.github.huifer.hardware.sche.inf.DataExtractService;
+import com.github.huifer.hardware.sche.inf.TaskService;
 import com.google.gson.Gson;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -18,21 +19,20 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.mongodb.core.MongoTemplate;
 
 //@SpringBootTest(classes = {CustomerBeans.class})
 //@ActiveProfiles(value = {"mongo", "logging"})
-class TaskNoStepServiceImplTest {
+class TaskServiceImplTest {
 
-  private static final Logger logger = LoggerFactory.getLogger(TaskNoStepServiceImplTest.class);
-  private final TaskNoStepService taskNoStepService = new TaskNoStepServiceATest(null);
+  private static final Logger logger = LoggerFactory.getLogger(TaskServiceImplTest.class);
+  private final TaskService taskService = new TaskServiceImpl(null);
   Gson gson = new Gson();
   TaskEntity tsk = null;
 
   @Test
   public void find() {
     List<RuleEntity> ruleEntities = tsk.getRuleEntities();
-    Object execute = taskNoStepService.execute(ruleEntities);
+    Object execute = taskService.execute(ruleEntities, new TaskServiceATest());
     System.out.println(execute);
   }
 
@@ -64,7 +64,6 @@ class TaskNoStepServiceImplTest {
     calcParam.add("s1");
     calcParam.add("s2");
     e.setCalcParam(calcParam);
-    e.setCalcParamMappingSign(null);
 
     e.setStep(true);
     e.setOrder(2);
@@ -79,7 +78,6 @@ class TaskNoStepServiceImplTest {
     ArrayList<String> calcParam = new ArrayList<>();
     calcParam.add("s1");
     e.setCalcParam(calcParam);
-    e.setCalcParamMappingSign(null);
 
     e.setStep(true);
     e.setOrder(1);
@@ -91,10 +89,6 @@ class TaskNoStepServiceImplTest {
     e.setName("公式一");
     e.setAlias("s1");
     e.setCalc("math.sqrt(a+b)");
-    HashMap<String, String> calcParamMappingSign = new HashMap<>();
-    calcParamMappingSign.put("a", "sig_4");
-    calcParamMappingSign.put("b", "sig_4");
-    e.setCalcParamMappingSign(calcParamMappingSign);
     e.setCalcParam(Arrays.stream(new String[]{"a", "b"}).toList());
     e.setStep(false);
     HashMap<String, QueryEntity> calcParamMappingQuery = new HashMap<>();
@@ -102,23 +96,19 @@ class TaskNoStepServiceImplTest {
     value.setSignal("sig_4");
     value.setDeviceId("device_1");
     value.setDeviceType("device_1");
-    value.setReduceTypeEnums(ReduceTypeEnums.MAX);
+    value.setReduceTypeEnums(ReduceTypeEnums.AVG);
     calcParamMappingQuery.put("a", value);
+    calcParamMappingQuery.put("b", value);
     e.setCalcParamMappingQuery(calcParamMappingQuery);
-    HashMap<String, List<FilterEntity>> calcParamFilter = new HashMap<>();
-    ArrayList<FilterEntity> value1 = new ArrayList<>();
-    calcParamFilter.put("a", value1);
+    Map<String, FilterEntity> calcParamFilter = new HashMap<>();
+    calcParamFilter.put("a", new FilterEntity());
     e.setCalcParamFilter(calcParamFilter);
     return e;
   }
 
-  private static class TaskNoStepServiceATest extends TaskNoStepServiceImpl {
+  private static class TaskServiceATest implements DataExtractService {
 
-    public TaskNoStepServiceATest(MongoTemplate mongoTemplate) {
-      super(mongoTemplate);
-    }
 
-    @Override
     public QueryResponse extract(QueryEntity query) {
       QueryResponse res = new QueryResponse();
       res.setSignle(query.getSignal());
@@ -131,7 +121,6 @@ class TaskNoStepServiceImplTest {
       return res;
     }
 
-    @Override
     public QueryResponse filter(QueryResponse data, List<FilterEntity> filter) {
       return data;
     }

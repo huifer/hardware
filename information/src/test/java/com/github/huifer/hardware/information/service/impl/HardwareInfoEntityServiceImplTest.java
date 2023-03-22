@@ -82,7 +82,7 @@ class HardwareInfoEntityServiceImplTest {
     hardwareInfoEntity.setUid(uid);
     ArrayList<HardwareInfoExtensionsEntity> extensionsEntities = new ArrayList<>();
     HardwareInfoExtensionsEntity e = new HardwareInfoExtensionsEntity();
-    e.setUsing(true);
+    e.setUsing(1);
     e.setDeviceId("硬件供应商id");
 
     extensionsEntities.add(e);

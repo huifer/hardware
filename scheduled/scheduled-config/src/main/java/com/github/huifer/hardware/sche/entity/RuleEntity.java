@@ -41,10 +41,7 @@ public class RuleEntity implements Serializable {
    * 公式所需参数
    **/
   private List<String> calcParam;
-  /**
-   * key: 公式参数 value: 设备信号
-   **/
-  private Map<String, String> calcParamMappingSign;
+
   /**
    * 是否是阶段运算值，如果是则需要等最后运算
    **/
@@ -57,7 +54,7 @@ public class RuleEntity implements Serializable {
   /**
    * key:公式中的参数，value：过滤条件
    **/
-  private Map<String, List<FilterEntity>> calcParamFilter;
+  private Map<String, FilterEntity> calcParamFilter;
   /**
    * 计算优先级，和step有关
    **/

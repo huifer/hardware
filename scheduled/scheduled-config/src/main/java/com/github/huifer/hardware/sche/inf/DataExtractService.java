@@ -1,21 +1,11 @@
 package com.github.huifer.hardware.sche.inf;
 
 import com.github.huifer.hardware.sche.entity.FilterEntity;
-import com.github.huifer.hardware.sche.entity.RuleEntity;
-import com.github.huifer.hardware.sche.entity.TaskEntity;
 import com.github.huifer.hardware.sche.entity.dto.QueryResponse;
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.Iterator;
 
-public interface TaskNoStepService {
-
-  /**
-   * 设置
-   **/
-  void save(TaskEntity taskEntity);
-
+public interface DataExtractService {
 
   /**
    * 提取数据
@@ -32,10 +22,16 @@ public interface TaskNoStepService {
    * @param filter 过滤对象
    * @return key: 信号标识，value: 过滤后需要进行的数据
    **/
-  QueryResponse filter(QueryResponse data, List<FilterEntity> filter);
-
-
-  Map<String, BigDecimal> execute(List<RuleEntity> ruleEntities);
-
-
+  default QueryResponse filter(QueryResponse data, FilterEntity filter) {
+    if (filter != null) {
+      for (Iterator<BigDecimal> iterator = data.getData().iterator(); iterator.hasNext(); ) {
+        BigDecimal datum = iterator.next();
+        if (filter.ignore(datum)) {
+          iterator.remove();
+        }
+      }
+      return data;
+    }
+    return data;
+  }
 }
