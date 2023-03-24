@@ -41,12 +41,6 @@ public class TaskResult implements Serializable {
    */
   private List<CalcResult> data;
 
-  /**
-   * 计算时间
-   */
-  private LocalDate calcRunTime;
-
-
 
   @Getter
   @Setter
@@ -57,6 +51,7 @@ public class TaskResult implements Serializable {
   @ToString
   public static class CalcResult {
 
+
     /**
      * 公式别名
      */
@@ -65,6 +60,11 @@ public class TaskResult implements Serializable {
      * 公式计算结果
      **/
     private BigDecimal data;
+
+    /**
+     * 计算时间
+     */
+    private LocalDate calcRunTime;
   }
 
 

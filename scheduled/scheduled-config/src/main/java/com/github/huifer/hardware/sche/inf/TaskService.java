@@ -34,11 +34,11 @@ public interface TaskService {
           CalcResult data = new CalcResult();
           data.setAliasName(k);
           data.setData(v);
+          data.setCalcRunTime(LocalDate.now());
           data1.add(data);
         }
     );
     taskResult.setData(data1);
-    taskResult.setCalcRunTime(LocalDate.now());
     return taskResult;
   }
 }

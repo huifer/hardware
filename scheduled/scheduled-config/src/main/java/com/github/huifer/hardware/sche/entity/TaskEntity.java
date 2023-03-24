@@ -21,6 +21,8 @@ public class TaskEntity implements Serializable {
 
  @Id
  private String id;
+
+ private List<String> ruleIds;
  /**
   * 规则
   */
