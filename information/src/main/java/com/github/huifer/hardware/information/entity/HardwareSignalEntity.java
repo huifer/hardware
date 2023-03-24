@@ -9,7 +9,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * 硬件型号实体
+ * 硬件信号实体
  **/
 @Getter
 @Setter

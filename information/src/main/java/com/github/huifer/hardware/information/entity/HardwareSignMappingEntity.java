@@ -28,8 +28,9 @@ public class HardwareSignMappingEntity implements Serializable {
 
   /**
    * 硬件唯一标识（系统的）
+   * {@link HardwareInfoEntity#uid}
    **/
-  private String HardwareUid;
+  private String hardwareUid;
   /**
    * 硬件类型id
    **/
@@ -40,6 +41,8 @@ public class HardwareSignMappingEntity implements Serializable {
    * 硬件输出信号key
    **/
   private String fromKey;
+
+
   private LocalDateTime createTime;
   private boolean deleted;
 

@@ -41,6 +41,11 @@ public class HardwareInfoEntity implements Serializable {
    **/
   private String uid;
 
+  /**
+   * 硬件类型id集合
+   **/
+  private List<String> typeIds;
+
 
   /**
    * 硬件扩展信息
