@@ -27,6 +27,11 @@ public class HardwareTypeEntity implements Serializable {
    * 硬件类型名称
    **/
   private String name;
+
+  /**
+   * 设备类型编码
+   */
+  private String code;
   /**
    * 硬件信号
    **/

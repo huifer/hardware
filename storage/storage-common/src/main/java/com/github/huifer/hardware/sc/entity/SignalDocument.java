@@ -16,13 +16,9 @@ public class SignalDocument {
   private String deviceType;
   @Indexed
   private String deviceId;
-
   @Indexed
   private String key;
-
   private String value;
-
-
   private long  time;
 
 

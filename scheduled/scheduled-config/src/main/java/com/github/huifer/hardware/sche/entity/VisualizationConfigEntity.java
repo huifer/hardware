@@ -28,9 +28,9 @@ public class VisualizationConfigEntity implements Serializable {
   @Id
   private String id;
   /**
-   * 公式id
+   * 规则id
    **/
-  private String ruleId;
+  private String ruleEntityId;
   /**
    * 每个时间所需要的系数
    **/

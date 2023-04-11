@@ -61,6 +61,9 @@ public class HardwareInfoEntity implements Serializable {
    * 是否删除
    **/
   private boolean deleted = false;
+  /**
+   * 创建时间
+   */
   private LocalDateTime createTime;
 
 }

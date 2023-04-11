@@ -1,0 +1,13 @@
+spring:
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: 47.98.250.152:3987
+      bindings:
+        producer-out-0:
+          destination: first-topic
+        consumer-in-0:
+          destination: first-topic
+    function:
+      definition: consumer;producer

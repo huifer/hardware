@@ -6,5 +6,6 @@ package com.github.huifer.hardware.sche.inf;
  **/
 public interface VisualizationService {
 
+
   void view(String taskEntityId);
 }

@@ -50,6 +50,7 @@ public class SignalDocumentServiceMongoImpl implements SignalDocumentService {
     if (org.apache.commons.lang3.StringUtils.isEmpty(signalDocument.getDeviceType())) {
       throw new IllegalArgumentException("设备类型必填");
     }
+    // TODO: 2023/4/11 设备类型转换模式处理
     DeviceTypeEnums conv = DeviceTypeEnums.conv(signalDocument.getDeviceType());
     if (conv == null) {
       throw new IllegalArgumentException("设备类型无法识别");
@@ -82,6 +83,7 @@ public class SignalDocumentServiceMongoImpl implements SignalDocumentService {
     if (StringUtils.isEmpty(deviceType)) {
       throw new IllegalArgumentException("设备类型必填");
     }
+    // TODO: 2023/4/11 设备类型转换模式处理
     DeviceTypeEnums conv = DeviceTypeEnums.conv(deviceType);
     if (conv == null) {
       throw new IllegalArgumentException("设备类型无法识别");
