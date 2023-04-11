@@ -51,7 +51,14 @@ public class TaskServiceImpl implements TaskService {
   public void save(TaskEntity taskEntity) {
     this.mongoTemplate.save(taskEntity, "task");
   }
+  private ApplicationEventPublisher applicationEventPublisher;
 
+
+
+  public TaskServiceImpl(ApplicationEventPublisher applicationEventPublisher,MongoTemplate mongoTemplate) {
+    this.applicationEventPublisher = applicationEventPublisher;
+    this.mongoTemplate = mongoTemplate;
+  }
 
   public TaskServiceImpl(MongoTemplate mongoTemplate) {
     this.mongoTemplate = mongoTemplate;
@@ -96,8 +103,7 @@ public class TaskServiceImpl implements TaskService {
     return ruleEntity.getCalc();
   }
 
-  @Autowired
-  private ApplicationEventPublisher applicationEventPublisher;
+
 
   /**
    * 执行step为true的计算
@@ -114,14 +120,18 @@ public class TaskServiceImpl implements TaskService {
     for (RuleEntity ruleEntity : ruleEntitiesTrue) {
       String calc = getCalc(ruleEntity, null);
       if (!org.apache.commons.lang3.StringUtils.isEmpty(calc)) {
-        this.applicationEventPublisher.publishEvent(new DataExtractionCompletedEvent());
+        if (applicationEventPublisher != null) {
+          this.applicationEventPublisher.publishEvent(new DataExtractionCompletedEvent());
+        }
         Object execute = AviatorEvaluator.execute(calc, param);
 
         // FIXME: 2023/3/17 key值确定
         String name = ruleEntity.getAlias();
         fd.put(name, new BigDecimal(execute.toString()));
         param.put(name, new BigDecimal(execute.toString()));
-        this.applicationEventPublisher.publishEvent(new DataCalculationCompletedEvent());
+        if (applicationEventPublisher != null) {
+          this.applicationEventPublisher.publishEvent(new DataCalculationCompletedEvent());
+        }
       } else {
         String name = ruleEntity.getAlias();
         fd.put(name, BigDecimal.ZERO);
@@ -250,13 +260,17 @@ public class TaskServiceImpl implements TaskService {
         QueryEntity v = entry.getValue();
         QueryResponse extract = extractService.extract(v);
         // 数据提取完成
-        this.applicationEventPublisher.publishEvent(new DataExtractionCompletedEvent());
+        if (applicationEventPublisher != null) {
+          this.applicationEventPublisher.publishEvent(new DataExtractionCompletedEvent());
+        }
         if (extract.getReduceTypeEnums() == null) {
           extract.setReduceTypeEnums(v.getReduceTypeEnums());
         }
         QueryResponse filter = extractService.filter(extract, calcParamFilter.get(k));
         // 数据过滤完成
-        this.applicationEventPublisher.publishEvent(new DataFilteringCompletedEvent());
+        if (applicationEventPublisher != null) {
+          this.applicationEventPublisher.publishEvent(new DataFilteringCompletedEvent());
+        }
         queryResponses.add(filter);
         calcParamMappingSign.put(k, filter.getSignle());
       }
@@ -270,7 +284,9 @@ public class TaskServiceImpl implements TaskService {
         BigDecimal calc = calc(calc1, queryResponses,
             calcParamMappingSign, ruleEntity.getStaticCalcParam());
         // 数据计算完成
-        this.applicationEventPublisher.publishEvent(new DataCalculationCompletedEvent());
+        if (applicationEventPublisher != null) {
+          this.applicationEventPublisher.publishEvent(new DataCalculationCompletedEvent());
+        }
         // FIXME: 2023/3/17 key值确定
         String name = ruleEntity.getAlias();
         res.put(name, calc);
