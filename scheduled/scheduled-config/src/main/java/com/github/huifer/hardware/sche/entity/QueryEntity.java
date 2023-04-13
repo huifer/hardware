@@ -26,6 +26,8 @@ public class QueryEntity implements Serializable {
   private String deviceId;
   private String deviceType;
 
+  // TODO: 2023/4/13 要做一个特殊处理，开始时间和结束时间是一个动态计算的而不是写死的
+
   /**
    * 开始时间
    **/
