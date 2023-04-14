@@ -2,6 +2,7 @@ package com.github.huifer.hardware.sche.entity;
 
 import com.github.huifer.hardware.common.enums.ReduceTypeEnums;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -35,6 +35,24 @@
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.mariuszgromada.math/MathParser.org-mXparser -->
+    <dependency>
+      <artifactId>MathParser.org-mXparser</artifactId>
+      <groupId>org.mariuszgromada.math</groupId>
+      <version>5.2.1</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.mvel/mvel2 -->
+    <dependency>
+      <artifactId>mvel2</artifactId>
+      <groupId>org.mvel</groupId>
+      <version>2.4.15.Final</version>
+    </dependency>
+    <dependency>
+      <artifactId>exp4j</artifactId>
+      <groupId>net.objecthunter</groupId>
+      <version>0.4.8</version>
+    </dependency>
+
   </dependencies>
 
 </project>
