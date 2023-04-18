@@ -15,6 +15,8 @@ public class ExpressionParser {
             return expression.toString();
         } else if (expression.isTextual()) {
             return expression.asText();
+        } else if (expression.get("op").asText().equalsIgnoreCase("None")) {
+            expression = expression.get("left");
         }
 
         JsonNode left = expression.get("left");
@@ -72,6 +74,7 @@ public class ExpressionParser {
             + "    }\n"
             + "}\n";
         // 解析 JSON 字符串为 JsonNode 对象
+        System.out.println("原始JSON = " + jsonStr);
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode expression = objectMapper.readTree(jsonStr);
 
@@ -79,6 +82,11 @@ public class ExpressionParser {
         String result = parseExpression(expression);
 
         // 打印结果
-        System.out.println(result);
+        System.out.println("解析数学公式 = " + result);
+        Object D = ExpressionParserA.strToJson(result);
+        System.out.println("反解析JSON = " + D);
+        String s = parseExpression(objectMapper.readTree(D.toString()));
+        System.out.println("反解析数学公式 = " + s);
+
     }
 }
