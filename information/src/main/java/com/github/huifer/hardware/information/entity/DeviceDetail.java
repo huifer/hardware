@@ -1,0 +1,64 @@
+package com.github.huifer.hardware.information.entity;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Version;
+import java.io.Serializable;
+import java.util.Date;
+
+import lombok.Data;
+import lombok.experimental.FieldNameConstants;
+import org.hibernate.annotations.Where;
+
+/**
+ * 设备详情表
+ */
+
+@Data
+@Entity
+@Table(name = "device_detail")
+@FieldNameConstants
+@Where(clause="deleted = 0 ")
+public class DeviceDetail extends BaseEntity implements Serializable {
+
+  private static final long serialVersionUID = 1L;
+
+  /**
+   * 设备详情表主键
+   */
+  @Id
+  @Column(name = "id", nullable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  /**
+   * 设备名称
+   */
+  @Column(name = "name")
+  private String name;
+
+  /**
+   * 设备地址
+   */
+  @Column(name = "address")
+  private String address;
+
+  /**
+   * 设备所在经度
+   */
+  @Column(name = "latitude")
+  private Float latitude;
+
+  /**
+   * 设备所在纬度
+   */
+  @Column(name = "longitude")
+  private Float longitude;
+
+
+
+}
