@@ -52,6 +52,41 @@
       <groupId>net.objecthunter</groupId>
       <version>0.4.8</version>
     </dependency>
+    <dependency>
+      <groupId>org.jscience</groupId>
+      <artifactId>jscience</artifactId>
+      <version>4.3.1</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/net.sf.jsci/jsci -->
+    <dependency>
+      <groupId>net.sf.jsci</groupId>
+      <artifactId>jsci</artifactId>
+      <version>1.2</version>
+    </dependency>
+    <dependency>
+      <groupId>net.sourceforge.jeuclid</groupId>
+      <artifactId>jeuclid-core</artifactId>
+      <version>3.1.9</version>
+    </dependency>
+
+
+
+    <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-math3 -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-math3</artifactId>
+      <version>3.2</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.scilab.forge/jlatexmath -->
+    <dependency>
+      <groupId>org.scilab.forge</groupId>
+      <artifactId>jlatexmath</artifactId>
+      <version>1.0.7</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+    </dependency>
 
   </dependencies>
 
