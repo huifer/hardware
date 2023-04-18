@@ -2,12 +2,12 @@ package com.github.huifer.hardware.common;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ExpressionParser {
+
+    public static final String LEFT = "( ";
+    public static final String RIGHT = " )";
 
     public static String parseExpression(JsonNode expression) {
         // 如果 expression 是一个数字或变量，直接返回
@@ -23,9 +23,9 @@ public class ExpressionParser {
 
         // 判断操作符
         if ("加法".equals(op)) {
-            return parseExpression(left) + " + " + parseExpression(right);
+            return LEFT + parseExpression(left) + " + " + parseExpression(right) + RIGHT;
         } else if ("减法".equals(op)) {
-            return parseExpression(left) + " - " + parseExpression(right);
+            return LEFT + parseExpression(left) + " - " + parseExpression(right) + RIGHT;
         } else if ("乘法".equals(op)) {
             return parseExpression(left) + " * " + parseExpression(right);
         } else if ("除法".equals(op)) {
@@ -57,8 +57,20 @@ public class ExpressionParser {
 
     public static void main(String[] args) throws IOException {
         // 示例 JSON 字符串
-        String jsonStr = "{\"left\":{\"left\":\"a\",\"op\":\"乘法\",\"right\":\"2\"},\"op\":\"加法\",\"right\":{\"left\":\"a\",\"op\":\"幂\",\"right\":{\"left\":\"b\",\"op\":\"sqrt\",\"right\":\"b\"}}}}";
-
+//        String jsonStr = "{\"left\":{\"left\":\"a\",\"op\":\"乘法\",\"right\":\"2\"},\"op\":\"加法\",\"right\":{\"left\":\"a\",\"op\":\"幂\",\"right\":{\"left\":\"b\",\"op\":\"sqrt\",\"right\":\"b\"}}}}";
+        String jsonStr = "{\n"
+            + "    \"left\": {\n"
+            + "        \"left\": \"a\",\n"
+            + "        \"op\": \"加法\",\n"
+            + "        \"right\": \"b\"\n"
+            + "    },\n"
+            + "    \"op\": \"除法\",\n"
+            + "    \"right\": {\n"
+            + "            \"left\": \"a\",\n"
+            + "            \"op\": \"减法\",\n"
+            + "            \"right\": \"b\"\n"
+            + "    }\n"
+            + "}\n";
         // 解析 JSON 字符串为 JsonNode 对象
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode expression = objectMapper.readTree(jsonStr);
