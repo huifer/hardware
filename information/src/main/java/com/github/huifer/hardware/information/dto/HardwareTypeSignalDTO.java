@@ -2,7 +2,6 @@ package com.github.huifer.hardware.information.dto;
 
 
 import java.io.Serializable;
-import java.util.Date;
 import lombok.Data;
 
 @Data
@@ -13,6 +12,7 @@ public class HardwareTypeSignalDTO implements Serializable {
   /**
    * 关系主键
    */
+
   private Long id;
 
 

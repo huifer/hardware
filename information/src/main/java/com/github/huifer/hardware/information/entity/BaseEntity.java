@@ -3,10 +3,11 @@ package com.github.huifer.hardware.information.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Version;
 import java.time.LocalDateTime;
-import java.util.Date;
 import lombok.Data;
+import lombok.experimental.FieldNameConstants;
 
 @Data
+@FieldNameConstants
 public class BaseEntity {
   @Column(name = "company_id")
   private String companyId;

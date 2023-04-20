@@ -6,10 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.Version;
 import java.io.Serializable;
-import java.util.Date;
-
 import lombok.Data;
 import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.Where;
@@ -20,10 +17,10 @@ import org.hibernate.annotations.Where;
 
 @Data
 @Entity
-@Table(name = "device_detail")
+@Table(name = "hardware_detail")
 @FieldNameConstants
-@Where(clause="deleted = 0 ")
-public class DeviceDetail extends BaseEntity implements Serializable {
+@Where(clause="deleted = 0 and state = 0 ")
+public class HardwareDetail extends BaseEntity implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
@@ -40,6 +37,12 @@ public class DeviceDetail extends BaseEntity implements Serializable {
    */
   @Column(name = "name")
   private String name;
+
+  /**
+   * 硬件唯一标识
+   */
+  @Column(name = "device_num")
+  private String deviceNum;
 
   /**
    * 设备地址
@@ -59,6 +62,10 @@ public class DeviceDetail extends BaseEntity implements Serializable {
   @Column(name = "longitude")
   private Float longitude;
 
-
+  /**
+   * 状态
+   */
+  @Column(name = "state")
+  private Boolean state;
 
 }

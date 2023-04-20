@@ -3,16 +3,18 @@ package com.github.huifer.hardware.information.service.impl;
 import com.github.huifer.hardware.information.entity.HardwareType;
 import com.github.huifer.hardware.information.repository.HardwareTypeRepository;
 import com.github.huifer.hardware.information.service.HardwareTypeService;
-
 import com.github.huifer.hardware.information.vo.HardwareTypeDTO;
-import com.github.huifer.hardware.information.vo.HardwareTypeQueryVO;
 import com.github.huifer.hardware.information.vo.HardwareTypeUpdateVO;
 import com.github.huifer.hardware.information.vo.HardwareTypeVO;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class HardwareTypeServiceImpl implements HardwareTypeService {
@@ -20,30 +22,50 @@ public class HardwareTypeServiceImpl implements HardwareTypeService {
   @Autowired
   private HardwareTypeRepository hardwareTypeRepository;
 
+  @Transactional(rollbackFor = {Exception.class})
   public Long save(HardwareTypeVO vO) {
     HardwareType bean = new HardwareType();
-    BeanUtils.copyProperties(vO, bean);
+    bean.setName(vO.getName());
+    bean.setCode(vO.getCode());
+    bean.setState(vO.getState());
+    bean.setCreateTime(LocalDateTime.now());
+    bean.setDeleted(false);
     bean = hardwareTypeRepository.save(bean);
     return bean.getId();
   }
 
-  public void delete(Long id) {
-    hardwareTypeRepository.deleteById(id);
+  @Transactional(rollbackFor = {Exception.class})
+  public Boolean delete(Long id) {
+    HardwareType hardwareType = requireOne(id);
+    hardwareType.setDeleted(true);
+    hardwareType.setUpdateTime(LocalDateTime.now());
+    return hardwareTypeRepository.save(hardwareType) != null;
   }
 
-  public void update(Long id, HardwareTypeUpdateVO vO) {
-    HardwareType bean = requireOne(id);
-    BeanUtils.copyProperties(vO, bean);
-    hardwareTypeRepository.save(bean);
+  @Transactional(rollbackFor = {Exception.class})
+  public Boolean update(Long id, HardwareTypeUpdateVO vO) {
+    HardwareType hardwareType = requireOne(id);
+    hardwareType.setUpdateTime(LocalDateTime.now());
+    hardwareType.setCode(vO.getCode());
+    hardwareType.setState(vO.getState());
+    hardwareType.setName(vO.getName());
+    return hardwareTypeRepository.save(hardwareType) == null;
   }
 
   public HardwareTypeDTO getById(Long id) {
-    HardwareType original = requireOne(id);
+    Optional<HardwareType> byId = hardwareTypeRepository.findById(id);
+    HardwareType original = new HardwareType();
+    if (byId.isPresent()) {
+      original = byId.get();
+    }
     return toDTO(original);
   }
 
-  public Page<HardwareTypeDTO> query(HardwareTypeQueryVO vO) {
-    throw new UnsupportedOperationException();
+  public List<HardwareTypeDTO> query() {
+    List<HardwareType> typeList = hardwareTypeRepository.findAll();
+    List<HardwareTypeDTO> hardwareTypeDTOList = typeList.stream().map(this::toDTO)
+        .collect(Collectors.toList());
+    return hardwareTypeDTOList;
   }
 
   private HardwareTypeDTO toDTO(HardwareType original) {
@@ -54,6 +76,6 @@ public class HardwareTypeServiceImpl implements HardwareTypeService {
 
   private HardwareType requireOne(Long id) {
     return hardwareTypeRepository.findById(id)
-        .orElseThrow(() -> new NoSuchElementException("Resource not found: " + id));
+        .orElseThrow(() -> new NoSuchElementException("此数据不存在请刷新: " + id));
   }
 }

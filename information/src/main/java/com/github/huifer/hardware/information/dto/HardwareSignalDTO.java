@@ -1,11 +1,13 @@
 package com.github.huifer.hardware.information.dto;
 
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
-import java.util.Date;
+import java.math.BigDecimal;
 import lombok.Data;
 
 @Data
+@Schema(description = "硬件信号值")
 public class HardwareSignalDTO implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -13,37 +15,46 @@ public class HardwareSignalDTO implements Serializable {
   /**
    * 硬件信号标识符表主键
    */
+  @Schema(description = "id")
   private Long id;
 
 
   /**
    * 信号名称
    */
+  @Schema(description = "信号名称")
   private String name;
-
-
+  /**
+   * 信号编号
+   */
+  @Schema(description = "信号编号")
+  private String signalNum;
   /**
    * 信号最小值
    */
-  private Float minValue;
+  @Schema(description = "信号最小值")
+  private BigDecimal minValue;
 
 
   /**
    * 信号最大值
    */
-  private Float maxValue;
+  @Schema(description = "信号最大值")
+  private BigDecimal maxValue;
 
 
   /**
    * 默认告警小区间
    */
-  private Float defaultWarnLow;
+  @Schema(description = "默认告警小区间")
+  private BigDecimal defaultWarnLow;
 
 
   /**
    * 默认告警大区间
    */
-  private Float defaultWarnHigh;
+  @Schema(description = "默认告警大区间")
+  private BigDecimal defaultWarnHigh;
 
 
 

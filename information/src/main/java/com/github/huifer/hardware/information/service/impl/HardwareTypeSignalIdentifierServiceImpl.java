@@ -1,4 +1,5 @@
 package com.github.huifer.hardware.information.service.impl;
+import java.time.LocalDateTime;
 
 import com.github.huifer.hardware.information.dto.HardwareTypeSignalIdentifierDTO;
 import com.github.huifer.hardware.information.entity.HardwareTypeSignalIdentifier;
@@ -13,6 +14,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class HardwareTypeSignalIdentifierServiceImpl implements
@@ -21,21 +23,33 @@ public class HardwareTypeSignalIdentifierServiceImpl implements
   @Autowired
   private HardwareTypeSignalIdentifierRepository hardwareTypeSignalIdentifierRepository;
 
+  @Transactional(rollbackFor = {Exception.class})
   public Long save(HardwareTypeSignalIdentifierVO vO) {
     HardwareTypeSignalIdentifier bean = new HardwareTypeSignalIdentifier();
-    BeanUtils.copyProperties(vO, bean);
+    bean.setTypeId(vO.getTypeId());
+    bean.setSignalId(vO.getSignalId());
+    bean.setUpdateTime(LocalDateTime.now());
+    bean.setCreateTime(LocalDateTime.now());
+    bean.setDeleted(false);
     bean = hardwareTypeSignalIdentifierRepository.save(bean);
     return bean.getId();
   }
 
-  public void delete(Long id) {
-    hardwareTypeSignalIdentifierRepository.deleteById(id);
+  @Transactional(rollbackFor = {Exception.class})
+  public Boolean delete(Long id) {
+    HardwareTypeSignalIdentifier hardwareTypeSignalIdentifier = requireOne(id);
+    hardwareTypeSignalIdentifier.setDeleted(true);
+    hardwareTypeSignalIdentifier.setUpdateTime(LocalDateTime.now());
+    return hardwareTypeSignalIdentifierRepository.save(hardwareTypeSignalIdentifier) != null;
   }
 
-  public void update(Long id, HardwareTypeSignalIdentifierUpdateVO vO) {
+  @Transactional(rollbackFor = {Exception.class})
+  public Boolean update(Long id, HardwareTypeSignalIdentifierUpdateVO vO) {
     HardwareTypeSignalIdentifier bean = requireOne(id);
-    BeanUtils.copyProperties(vO, bean);
-    hardwareTypeSignalIdentifierRepository.save(bean);
+    bean.setTypeId(vO.getTypeId());
+    bean.setSignalId(vO.getSignalId());
+    bean.setUpdateTime(LocalDateTime.now());
+    return hardwareTypeSignalIdentifierRepository.save(bean) != null;
   }
 
   public HardwareTypeSignalIdentifierDTO getById(Long id) {
@@ -55,6 +69,6 @@ public class HardwareTypeSignalIdentifierServiceImpl implements
 
   private HardwareTypeSignalIdentifier requireOne(Long id) {
     return hardwareTypeSignalIdentifierRepository.findById(id)
-        .orElseThrow(() -> new NoSuchElementException("Resource not found: " + id));
+        .orElseThrow(() -> new NoSuchElementException("此数据不存在请刷新: " + id));
   }
 }

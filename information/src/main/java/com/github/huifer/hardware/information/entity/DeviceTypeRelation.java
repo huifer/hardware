@@ -9,6 +9,7 @@ import jakarta.persistence.Table;
 import java.io.Serializable;
 
 import lombok.Data;
+import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.Where;
 
 
@@ -17,6 +18,7 @@ import org.hibernate.annotations.Where;
  */
 @Data
 @Entity
+@FieldNameConstants
 @Table(name = "device_type_relation")
 @Where(clause="deleted = 0 ")
 public class DeviceTypeRelation extends BaseEntity  implements Serializable {

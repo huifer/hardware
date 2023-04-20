@@ -17,7 +17,7 @@ import org.hibernate.annotations.Where;
 @Data
 @Entity
 @Table(name = "hardware_type")
-@Where(clause="deleted = 0 ")
+@Where(clause="deleted = 0 and  ")
 public class HardwareType  extends  BaseEntity implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -41,6 +41,13 @@ public class HardwareType  extends  BaseEntity implements Serializable {
    */
   @Column(name = "code")
   private String code;
+
+
+  /**
+   * 硬件类型状态
+   */
+  @Column(name = "state")
+  private Integer state;
 
 
 

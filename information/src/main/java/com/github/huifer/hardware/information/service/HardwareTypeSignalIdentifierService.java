@@ -11,9 +11,9 @@ public interface HardwareTypeSignalIdentifierService {
 
   public Long save(HardwareTypeSignalIdentifierVO vO) ;
 
-  public void delete(Long id) ;
+  public Boolean delete(Long id) ;
 
-  public void update(Long id, HardwareTypeSignalIdentifierUpdateVO vO);
+  public Boolean update(Long id, HardwareTypeSignalIdentifierUpdateVO vO);
 
   public HardwareTypeSignalIdentifierDTO getById(Long id) ;
 

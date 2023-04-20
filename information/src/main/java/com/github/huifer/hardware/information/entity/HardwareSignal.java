@@ -8,7 +8,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.io.Serializable;
 
+import java.math.BigDecimal;
 import lombok.Data;
+import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.Where;
 
 /**
@@ -17,7 +19,8 @@ import org.hibernate.annotations.Where;
 @Data
 @Entity
 @Table(name = "hardware_signal")
-@Where(clause="deleted = 0 ")
+@FieldNameConstants
+@Where(clause="deleted = 0  and state = 0")
 public class HardwareSignal extends BaseEntity implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -40,26 +43,32 @@ public class HardwareSignal extends BaseEntity implements Serializable {
    * 信号最小值
    */
   @Column(name = "min_value")
-  private Float minValue;
+  private BigDecimal minValue;
 
   /**
    * 信号最大值
    */
   @Column(name = "max_value")
-  private Float maxValue;
+  private BigDecimal maxValue;
 
   /**
    * 默认告警小区间
    */
   @Column(name = "default_warn_low")
-  private Float defaultWarnLow;
+  private BigDecimal defaultWarnLow;
 
   /**
    * 默认告警大区间
    */
   @Column(name = "default_warn_high")
-  private Float defaultWarnHigh;
+  private BigDecimal defaultWarnHigh;
 
 
+  /**
+   * 是否启用停用
+   *  <p>true：启用；false：禁用
+   */
+  @Column(name = "state")
+  private Boolean state;
 
 }

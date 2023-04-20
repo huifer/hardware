@@ -1,18 +1,18 @@
-package com.github.huifer.hardware.information.vo.impl;
+package com.github.huifer.hardware.information.service.impl;
 
+import com.github.huifer.hardware.information.dto.HardwareExtensionInfoDTO;
 import com.github.huifer.hardware.information.entity.HardwareExtensionInfo;
 import com.github.huifer.hardware.information.repository.HardwareExtensionInfoRepository;
-import com.github.huifer.hardware.information.dto.HardwareExtensionInfoDTO;
 import com.github.huifer.hardware.information.service.HardwareExtensionInfoService;
-import com.github.huifer.hardware.information.vo.HardwareExtensionInfoQueryVO;
 import com.github.huifer.hardware.information.vo.HardwareExtensionInfoUpdateVO;
 import com.github.huifer.hardware.information.vo.HardwareExtensionInfoVO;
-import com.github.huifer.hardware.information.vo.HardwareExtensionInfoVO;
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class HardwareExtensionInfoServiceImpl implements HardwareExtensionInfoService {
@@ -20,31 +20,45 @@ public class HardwareExtensionInfoServiceImpl implements HardwareExtensionInfoSe
   @Autowired
   private HardwareExtensionInfoRepository hardwareExtensionInfoRepository;
 
+  @Transactional(rollbackFor = {Exception.class})
+
   public Long save(HardwareExtensionInfoVO vO) {
     HardwareExtensionInfo bean = new HardwareExtensionInfo();
-    BeanUtils.copyProperties(vO, bean);
+    bean.setDeviceId(vO.getDeviceId());
+    bean.setExtInfo(vO.getExtInfo());
+    bean.setUpdateTime(LocalDateTime.now());
+    bean.setCreateTime(LocalDateTime.now());
+    bean.setDeleted(false);
     bean = hardwareExtensionInfoRepository.save(bean);
     return bean.getId();
   }
 
-  public void delete(Long id) {
-    hardwareExtensionInfoRepository.deleteById(id);
+  @Transactional(rollbackFor = {Exception.class})
+  public Boolean delete(Long id) {
+    HardwareExtensionInfo hardwareExtensionInfo = requireOne(id);
+    hardwareExtensionInfo.setDeleted(true);
+    hardwareExtensionInfo.setUpdateTime(LocalDateTime.now());
+    return hardwareExtensionInfoRepository.save(hardwareExtensionInfo) != null;
   }
 
-  public void update(Long id, HardwareExtensionInfoUpdateVO vO) {
+
+  @Transactional(rollbackFor = {Exception.class})
+  public Boolean update(Long id, HardwareExtensionInfoUpdateVO vO) {
     HardwareExtensionInfo bean = requireOne(id);
-    BeanUtils.copyProperties(vO, bean);
-    hardwareExtensionInfoRepository.save(bean);
+    bean.setExtInfo(vO.getExtInfo());
+    bean.setUpdateTime(LocalDateTime.now());
+    return hardwareExtensionInfoRepository.save(bean) != null;
   }
 
   public HardwareExtensionInfoDTO getById(Long id) {
-    HardwareExtensionInfo original = requireOne(id);
-    return toDTO(original);
+    Optional<HardwareExtensionInfo> byId = hardwareExtensionInfoRepository.findById(id);
+    HardwareExtensionInfo hardwareExtensionInfo = new HardwareExtensionInfo();
+    if (byId.isPresent()) {
+      hardwareExtensionInfo = byId.get();
+    }
+    return toDTO(hardwareExtensionInfo);
   }
 
-  public Page<HardwareExtensionInfoDTO> query(HardwareExtensionInfoQueryVO vO) {
-    throw new UnsupportedOperationException();
-  }
 
   private HardwareExtensionInfoDTO toDTO(HardwareExtensionInfo original) {
     HardwareExtensionInfoDTO bean = new HardwareExtensionInfoDTO();
@@ -54,6 +68,6 @@ public class HardwareExtensionInfoServiceImpl implements HardwareExtensionInfoSe
 
   private HardwareExtensionInfo requireOne(Long id) {
     return hardwareExtensionInfoRepository.findById(id)
-        .orElseThrow(() -> new NoSuchElementException("Resource not found: " + id));
+        .orElseThrow(() -> new NoSuchElementException("此数据不存在请刷新: " + id));
   }
 }

@@ -9,6 +9,7 @@ import jakarta.persistence.Table;
 import java.io.Serializable;
 
 import lombok.Data;
+import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.Where;
 
 /**
@@ -17,6 +18,7 @@ import org.hibernate.annotations.Where;
 @Data
 @Entity
 @Table(name = "hardware_type_signal_identifier")
+@FieldNameConstants
 @Where(clause="deleted = 0 ")
 public class HardwareTypeSignalIdentifier extends BaseEntity implements Serializable {
 
