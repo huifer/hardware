@@ -4,8 +4,8 @@ import com.github.huifer.hardware.common.base.PageResponse;
 import com.github.huifer.hardware.common.base.SortRequest;
 import com.github.huifer.hardware.information.dto.HardwareSignalDTO;
 import com.github.huifer.hardware.information.entity.BaseEntity;
-import com.github.huifer.hardware.information.entity.HardwareSignal;
-import com.github.huifer.hardware.information.entity.HardwareSignal.Fields;
+import com.github.huifer.hardware.information.entity.HardwareSignalEntity;
+import com.github.huifer.hardware.information.entity.HardwareSignalEntity.Fields;
 import com.github.huifer.hardware.information.repository.HardwareSignalRepository;
 import com.github.huifer.hardware.information.service.HardwareSignalService;
 import com.github.huifer.hardware.information.vo.HardwareSignalQueryVO;
@@ -37,7 +37,7 @@ public class HardwareSignalServiceImpl implements HardwareSignalService {
 
   @Transactional(rollbackFor = {Exception.class})
   public Long save(HardwareSignalVO vO) {
-    HardwareSignal bean = new HardwareSignal();
+    HardwareSignalEntity bean = new HardwareSignalEntity();
     bean.setName(vO.getName());
     bean.setMinValue(vO.getMinValue());
     bean.setMaxValue(vO.getMaxValue());
@@ -54,7 +54,7 @@ public class HardwareSignalServiceImpl implements HardwareSignalService {
 
   @Transactional(rollbackFor = {Exception.class})
   public Boolean delete(Long id) {
-    HardwareSignal hardwareSignal = requireOne(id);
+    HardwareSignalEntity hardwareSignal = requireOne(id);
     hardwareSignal.setDeleted(true);
     hardwareSignal.setUpdateTime(LocalDateTime.now());
     return hardwareSignalRepository.save(hardwareSignal) != null;
@@ -63,7 +63,7 @@ public class HardwareSignalServiceImpl implements HardwareSignalService {
 
   @Transactional(rollbackFor = {Exception.class})
   public Boolean update(Long id, HardwareSignalUpdateVO vO) {
-    HardwareSignal bean = requireOne(id);
+    HardwareSignalEntity bean = requireOne(id);
     bean.setName(vO.getName());
     bean.setMinValue(vO.getMinValue());
     bean.setMaxValue(vO.getMaxValue());
@@ -76,8 +76,8 @@ public class HardwareSignalServiceImpl implements HardwareSignalService {
   }
 
   public HardwareSignalDTO getById(Long id) {
-    Optional<HardwareSignal> byId = hardwareSignalRepository.findById(id);
-    HardwareSignal original = new HardwareSignal();
+    Optional<HardwareSignalEntity> byId = hardwareSignalRepository.findById(id);
+    HardwareSignalEntity original = new HardwareSignalEntity();
     if (byId.isPresent()) {
       original = byId.get();
     }
@@ -97,7 +97,7 @@ public class HardwareSignalServiceImpl implements HardwareSignalService {
     of = PageRequest.of(vO.getPage(), vO.getSize(), by);
 
     return dbToResp(hardwareSignalRepository.findAll(
-        (Specification<HardwareSignal>) (root, query, cb) -> {
+        (Specification<HardwareSignalEntity>) (root, query, cb) -> {
           List<Predicate> list = new ArrayList<>();
           if (StringUtils.hasText(vO.getName())) {
             list.add(cb.like(root.get(Fields.name), "%" + vO.getName() + "%"));
@@ -119,7 +119,7 @@ public class HardwareSignalServiceImpl implements HardwareSignalService {
         }, of));
 
   }
-  private PageResponse<HardwareSignalDTO> dbToResp(Page<HardwareSignal> all) {
+  private PageResponse<HardwareSignalDTO> dbToResp(Page<HardwareSignalEntity> all) {
     PageResponse<HardwareSignalDTO> response = new PageResponse<>();
     response.setTotal(all.getTotalElements());
     Pageable pageable = all.getPageable();
@@ -134,13 +134,13 @@ public class HardwareSignalServiceImpl implements HardwareSignalService {
   }
 
 
-  private HardwareSignalDTO toDTO(HardwareSignal original) {
+  private HardwareSignalDTO toDTO(HardwareSignalEntity original) {
     HardwareSignalDTO bean = new HardwareSignalDTO();
     BeanUtils.copyProperties(original, bean);
     return bean;
   }
 
-  private HardwareSignal requireOne(Long id) {
+  private HardwareSignalEntity requireOne(Long id) {
     return hardwareSignalRepository.findById(id)
         .orElseThrow(() -> new NoSuchElementException("此数据不存在请刷新: " + id));
   }

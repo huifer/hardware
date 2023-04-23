@@ -42,7 +42,6 @@ public class DeviceDetailServiceImpl implements DeviceDetailService {
   public Long save(DeviceDetailVO vO) {
     DeviceDetailEntity bean = new DeviceDetailEntity();
     bean.setName(vO.getName());
-    bean.setDeviceNum(vO.getDeviceNum());
     bean.setAddress(vO.getAddress());
     bean.setLatitude(vO.getLatitude());
     bean.setLongitude(vO.getLongitude());
