@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @Schema(name = "设备信息查询")
-public class HardwareDetailQueryVO extends PageAndSortRequest implements Serializable {
+public class DeviceDetailQueryVO extends PageAndSortRequest implements Serializable {
 
   private static final long serialVersionUID = 1L;
 

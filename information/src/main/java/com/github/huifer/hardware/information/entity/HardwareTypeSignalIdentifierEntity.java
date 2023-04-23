@@ -12,21 +12,20 @@ import lombok.Data;
 import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.Where;
 
-
 /**
- * 设备类型关联表
+ * 硬件类型信号标识符关联表
  */
 @Data
 @Entity
+@Table(name = "hardware_type_signal_identifier")
 @FieldNameConstants
-@Table(name = "device_type_relation")
 @Where(clause="deleted = 0 ")
-public class DeviceTypeRelation extends BaseEntity  implements Serializable {
+public class HardwareTypeSignalIdentifierEntity extends BaseEntity implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
   /**
-   * 设备详情表主键
+   * 关系主键
    */
   @Id
   @Column(name = "id", nullable = false)
@@ -34,16 +33,17 @@ public class DeviceTypeRelation extends BaseEntity  implements Serializable {
   private Long id;
 
   /**
-   * 设备详情表中的设备ID
-   */
-  @Column(name = "device_id")
-  private Long deviceId;
-
-  /**
    * 硬件类型表中的硬件类型ID
    */
   @Column(name = "type_id")
   private Long typeId;
+
+  /**
+   * 硬件信号标识符表中的硬件信号ID
+   */
+  @Column(name = "signal_id")
+  private Long signalId;
+
 
 
 }

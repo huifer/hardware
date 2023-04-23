@@ -1,7 +1,7 @@
 package com.github.huifer.hardware.information.service.impl;
 
 import com.github.huifer.hardware.information.dto.DeviceTypeRelationDTO;
-import com.github.huifer.hardware.information.entity.DeviceTypeRelation;
+import com.github.huifer.hardware.information.entity.DeviceTypeRelationEntity;
 import com.github.huifer.hardware.information.repository.DeviceTypeRelationRepository;
 import com.github.huifer.hardware.information.service.DeviceTypeRelationService;
 import com.github.huifer.hardware.information.vo.DeviceTypeRelationUpdateVO;
@@ -22,7 +22,7 @@ public class DeviceTypeRelationServiceImpl implements DeviceTypeRelationService 
 
   @Transactional(rollbackFor = {Exception.class})
   public Long save(DeviceTypeRelationVO vO) {
-    DeviceTypeRelation bean = new DeviceTypeRelation();
+    DeviceTypeRelationEntity bean = new DeviceTypeRelationEntity();
     bean.setDeviceId(vO.getDeviceId());
     bean.setTypeId(vO.getTypeId());
     bean.setCreateTime(LocalDateTime.now());
@@ -33,7 +33,7 @@ public class DeviceTypeRelationServiceImpl implements DeviceTypeRelationService 
 
   @Transactional(rollbackFor = {Exception.class})
   public Boolean delete(Long id) {
-    DeviceTypeRelation deviceTypeRelation = requireOne(id);
+    DeviceTypeRelationEntity deviceTypeRelation = requireOne(id);
     deviceTypeRelation.setDeleted(true);
     deviceTypeRelation.setUpdateTime(LocalDateTime.now());
      return deviceTypeRelationRepository.save(deviceTypeRelation) != null;
@@ -43,7 +43,7 @@ public class DeviceTypeRelationServiceImpl implements DeviceTypeRelationService 
 
   @Transactional(rollbackFor = {Exception.class})
   public Boolean update(Long id, DeviceTypeRelationUpdateVO vO) {
-    DeviceTypeRelation bean = requireOne(id);
+    DeviceTypeRelationEntity bean = requireOne(id);
     bean.setDeviceId(vO.getDeviceId());
     bean.setTypeId(vO.getTypeId());
     bean.setUpdateTime(LocalDateTime.now());
@@ -51,8 +51,8 @@ public class DeviceTypeRelationServiceImpl implements DeviceTypeRelationService 
   }
 
   public DeviceTypeRelationDTO getById(Long id) {
-    Optional<DeviceTypeRelation> byId = deviceTypeRelationRepository.findById(id);
-    DeviceTypeRelation original = requireOne(id);
+    Optional<DeviceTypeRelationEntity> byId = deviceTypeRelationRepository.findById(id);
+    DeviceTypeRelationEntity original = requireOne(id);
     if (byId.isPresent()){
       original =  byId.get();
     }
@@ -60,13 +60,13 @@ public class DeviceTypeRelationServiceImpl implements DeviceTypeRelationService 
   }
 
 
-  private DeviceTypeRelationDTO toDTO(DeviceTypeRelation original) {
+  private DeviceTypeRelationDTO toDTO(DeviceTypeRelationEntity original) {
     DeviceTypeRelationDTO bean = new DeviceTypeRelationDTO();
     BeanUtils.copyProperties(original, bean);
     return bean;
   }
 
-  private DeviceTypeRelation requireOne(Long id) {
+  private DeviceTypeRelationEntity requireOne(Long id) {
     return deviceTypeRelationRepository.findById(id)
         .orElseThrow(() -> new NoSuchElementException("此数据不存在请刷新: " + id));
   }

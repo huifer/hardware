@@ -2,12 +2,12 @@ package com.github.huifer.hardware.information.service;
 
 
 import com.github.huifer.hardware.common.base.PageResponse;
-import com.github.huifer.hardware.information.dto.HardwareDetailDTO;
-import com.github.huifer.hardware.information.vo.HardwareDetailQueryVO;
-import com.github.huifer.hardware.information.vo.HardwareDetailUpdateVO;
-import com.github.huifer.hardware.information.vo.HardwareDetailVO;
+import com.github.huifer.hardware.information.dto.DeviceDetailDTO;
+import com.github.huifer.hardware.information.vo.DeviceDetailQueryVO;
+import com.github.huifer.hardware.information.vo.DeviceDetailUpdateVO;
+import com.github.huifer.hardware.information.vo.DeviceDetailVO;
 
-public interface HardwareDetailService {
+public interface DeviceDetailService {
 
 
   /**
@@ -16,7 +16,7 @@ public interface HardwareDetailService {
    * @param vO 设备详情数据
    * @return 添加结果
    */
-   Long save(HardwareDetailVO vO);
+   Long save(DeviceDetailVO vO);
 
   /**
    * 删除设备详情
@@ -33,7 +33,7 @@ public interface HardwareDetailService {
    * @param vO 设备详情数据
    * @return 修改结果
    */
-   Boolean update(Long id, HardwareDetailUpdateVO vO);
+   Boolean update(Long id, DeviceDetailUpdateVO vO);
 
   /**
    * 获取设备详情
@@ -41,7 +41,7 @@ public interface HardwareDetailService {
    * @param id 设备编号
    * @return 设备详情数据
    */
-   HardwareDetailDTO getById(Long id);
+   DeviceDetailDTO getById(Long id);
 
   /**
    * 获取所有设备详情
@@ -49,6 +49,6 @@ public interface HardwareDetailService {
    * @param vO 查询条件
    * @return 设备详情数据列表
    */
-  PageResponse<HardwareDetailDTO> query(HardwareDetailQueryVO vO);
+  PageResponse<DeviceDetailDTO> query(DeviceDetailQueryVO vO);
 
 }

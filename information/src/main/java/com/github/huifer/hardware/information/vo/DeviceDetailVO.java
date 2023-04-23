@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @Schema(description = "设备信息")
-public class HardwareDetailVO implements Serializable {
+public class DeviceDetailVO implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
@@ -22,12 +22,7 @@ public class HardwareDetailVO implements Serializable {
   private String name;
 
 
-  /**
-   * 设备名称
-   */
-  @Schema(description = "硬件编号")
-  @NotNull(message = "设备名称不能为空")
-  private String deviceNumber;
+
 
   /**
    * 设备地址

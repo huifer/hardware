@@ -2,15 +2,15 @@ package com.github.huifer.hardware.information.service.impl;
 
 import com.github.huifer.hardware.common.base.PageResponse;
 import com.github.huifer.hardware.common.base.SortRequest;
-import com.github.huifer.hardware.information.dto.HardwareDetailDTO;
+import com.github.huifer.hardware.information.dto.DeviceDetailDTO;
 import com.github.huifer.hardware.information.entity.BaseEntity;
-import com.github.huifer.hardware.information.entity.HardwareDetail;
-import com.github.huifer.hardware.information.entity.HardwareDetail.Fields;
+import com.github.huifer.hardware.information.entity.DeviceDetailEntity;
+import com.github.huifer.hardware.information.entity.DeviceDetailEntity.Fields;
 import com.github.huifer.hardware.information.repository.HardwareDetailRepository;
-import com.github.huifer.hardware.information.service.HardwareDetailService;
-import com.github.huifer.hardware.information.vo.HardwareDetailQueryVO;
-import com.github.huifer.hardware.information.vo.HardwareDetailUpdateVO;
-import com.github.huifer.hardware.information.vo.HardwareDetailVO;
+import com.github.huifer.hardware.information.service.DeviceDetailService;
+import com.github.huifer.hardware.information.vo.DeviceDetailQueryVO;
+import com.github.huifer.hardware.information.vo.DeviceDetailUpdateVO;
+import com.github.huifer.hardware.information.vo.DeviceDetailVO;
 import jakarta.persistence.criteria.Predicate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -32,15 +32,15 @@ import org.springframework.util.StringUtils;
 
 
 @Service
-public class HardwareDetailServiceImpl implements HardwareDetailService {
+public class DeviceDetailServiceImpl implements DeviceDetailService {
 
   @Autowired
   private HardwareDetailRepository hardwareDetailRepository;
 
 
   @Transactional(rollbackFor = {Exception.class})
-  public Long save(HardwareDetailVO vO) {
-    HardwareDetail bean = new HardwareDetail();
+  public Long save(DeviceDetailVO vO) {
+    DeviceDetailEntity bean = new DeviceDetailEntity();
     bean.setName(vO.getName());
     bean.setDeviceNum(vO.getDeviceNum());
     bean.setAddress(vO.getAddress());
@@ -55,7 +55,7 @@ public class HardwareDetailServiceImpl implements HardwareDetailService {
 
   @Transactional(rollbackFor = {Exception.class})
   public Boolean delete(Long id) {
-    HardwareDetail deviceDetail = requireOne(id);
+    DeviceDetailEntity deviceDetail = requireOne(id);
     deviceDetail.setDeleted(true);
     deviceDetail.setUpdateTime(LocalDateTime.now());
     return hardwareDetailRepository.save(deviceDetail) != null;
@@ -63,10 +63,10 @@ public class HardwareDetailServiceImpl implements HardwareDetailService {
 
 
   @Transactional(rollbackFor = {Exception.class})
-  public Boolean update(Long id, HardwareDetailUpdateVO vO) {
-    HardwareDetail bean = requireOne(id);
-    List<HardwareDetail> detailList = hardwareDetailRepository.findAll(
-        (Specification<HardwareDetail>) (root, query, cb) -> {
+  public Boolean update(Long id, DeviceDetailUpdateVO vO) {
+    DeviceDetailEntity bean = requireOne(id);
+    List<DeviceDetailEntity> detailList = hardwareDetailRepository.findAll(
+        (Specification<DeviceDetailEntity>) (root, query, cb) -> {
           List<Predicate> list = new ArrayList<>();
           list.add(cb.equal(root.get(Fields.name), vO.getName()));
           list.add(cb.notEqual(root.get(Fields.id), id));
@@ -85,16 +85,16 @@ public class HardwareDetailServiceImpl implements HardwareDetailService {
   }
 
 
-  public HardwareDetailDTO getById(Long id) {
-    Optional<HardwareDetail> byId = hardwareDetailRepository.findById(id);
-    HardwareDetail original = new HardwareDetail();
+  public DeviceDetailDTO getById(Long id) {
+    Optional<DeviceDetailEntity> byId = hardwareDetailRepository.findById(id);
+    DeviceDetailEntity original = new DeviceDetailEntity();
     if (byId.isPresent()) {
       original = byId.get();
     }
     return toDTO(original);
   }
 
-  public PageResponse<HardwareDetailDTO> query(HardwareDetailQueryVO vO) {
+  public PageResponse<DeviceDetailDTO> query(DeviceDetailQueryVO vO) {
     Pageable of;
     SortRequest sort = vO.getSort();
     Sort by;
@@ -107,7 +107,7 @@ public class HardwareDetailServiceImpl implements HardwareDetailService {
     of = PageRequest.of(vO.getPage(), vO.getSize(), by);
 
     return dbToResp(hardwareDetailRepository.findAll(
-        (Specification<HardwareDetail>) (root, query, cb) -> {
+        (Specification<DeviceDetailEntity>) (root, query, cb) -> {
           List<Predicate> list = new ArrayList<>();
           if (StringUtils.hasText(vO.getName())) {
             list.add(cb.like(root.get(Fields.name), "%" + vO.getName() + "%"));
@@ -120,27 +120,27 @@ public class HardwareDetailServiceImpl implements HardwareDetailService {
         }, of));
 
   }
-  private PageResponse<HardwareDetailDTO> dbToResp(Page<HardwareDetail> all) {
-    PageResponse<HardwareDetailDTO> response = new PageResponse<>();
+  private PageResponse<DeviceDetailDTO> dbToResp(Page<DeviceDetailEntity> all) {
+    PageResponse<DeviceDetailDTO> response = new PageResponse<>();
     response.setTotal(all.getTotalElements());
     Pageable pageable = all.getPageable();
     response.setPage(pageable.getPageNumber());
     response.setSize(pageable.getPageSize());
     response.setData(all.getContent().stream().map(it -> {
-      HardwareDetailDTO dto = new HardwareDetailDTO();
+      DeviceDetailDTO dto = new DeviceDetailDTO();
       BeanUtils.copyProperties(it, dto);
       return dto;
     }).toList());
     return response;
   }
 
-  private HardwareDetailDTO toDTO(HardwareDetail original) {
-    HardwareDetailDTO bean = new HardwareDetailDTO();
+  private DeviceDetailDTO toDTO(DeviceDetailEntity original) {
+    DeviceDetailDTO bean = new DeviceDetailDTO();
     BeanUtils.copyProperties(original, bean);
     return bean;
   }
 
-  private HardwareDetail requireOne(Long id) {
+  private DeviceDetailEntity requireOne(Long id) {
     return hardwareDetailRepository.findById(id)
         .orElseThrow(() -> new NoSuchElementException("此数据不存在请刷新: " + id));
   }

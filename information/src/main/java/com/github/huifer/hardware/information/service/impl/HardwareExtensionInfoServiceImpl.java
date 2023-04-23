@@ -1,7 +1,7 @@
 package com.github.huifer.hardware.information.service.impl;
 
 import com.github.huifer.hardware.information.dto.HardwareExtensionInfoDTO;
-import com.github.huifer.hardware.information.entity.HardwareExtensionInfo;
+import com.github.huifer.hardware.information.entity.HardwareExtensionInfoEntity;
 import com.github.huifer.hardware.information.repository.HardwareExtensionInfoRepository;
 import com.github.huifer.hardware.information.service.HardwareExtensionInfoService;
 import com.github.huifer.hardware.information.vo.HardwareExtensionInfoUpdateVO;
@@ -23,7 +23,7 @@ public class HardwareExtensionInfoServiceImpl implements HardwareExtensionInfoSe
   @Transactional(rollbackFor = {Exception.class})
 
   public Long save(HardwareExtensionInfoVO vO) {
-    HardwareExtensionInfo bean = new HardwareExtensionInfo();
+    HardwareExtensionInfoEntity bean = new HardwareExtensionInfoEntity();
     bean.setDeviceId(vO.getDeviceId());
     bean.setExtInfo(vO.getExtInfo());
     bean.setUpdateTime(LocalDateTime.now());
@@ -35,7 +35,7 @@ public class HardwareExtensionInfoServiceImpl implements HardwareExtensionInfoSe
 
   @Transactional(rollbackFor = {Exception.class})
   public Boolean delete(Long id) {
-    HardwareExtensionInfo hardwareExtensionInfo = requireOne(id);
+    HardwareExtensionInfoEntity hardwareExtensionInfo = requireOne(id);
     hardwareExtensionInfo.setDeleted(true);
     hardwareExtensionInfo.setUpdateTime(LocalDateTime.now());
     return hardwareExtensionInfoRepository.save(hardwareExtensionInfo) != null;
@@ -44,15 +44,15 @@ public class HardwareExtensionInfoServiceImpl implements HardwareExtensionInfoSe
 
   @Transactional(rollbackFor = {Exception.class})
   public Boolean update(Long id, HardwareExtensionInfoUpdateVO vO) {
-    HardwareExtensionInfo bean = requireOne(id);
+    HardwareExtensionInfoEntity bean = requireOne(id);
     bean.setExtInfo(vO.getExtInfo());
     bean.setUpdateTime(LocalDateTime.now());
     return hardwareExtensionInfoRepository.save(bean) != null;
   }
 
   public HardwareExtensionInfoDTO getById(Long id) {
-    Optional<HardwareExtensionInfo> byId = hardwareExtensionInfoRepository.findById(id);
-    HardwareExtensionInfo hardwareExtensionInfo = new HardwareExtensionInfo();
+    Optional<HardwareExtensionInfoEntity> byId = hardwareExtensionInfoRepository.findById(id);
+    HardwareExtensionInfoEntity hardwareExtensionInfo = new HardwareExtensionInfoEntity();
     if (byId.isPresent()) {
       hardwareExtensionInfo = byId.get();
     }
@@ -60,13 +60,13 @@ public class HardwareExtensionInfoServiceImpl implements HardwareExtensionInfoSe
   }
 
 
-  private HardwareExtensionInfoDTO toDTO(HardwareExtensionInfo original) {
+  private HardwareExtensionInfoDTO toDTO(HardwareExtensionInfoEntity original) {
     HardwareExtensionInfoDTO bean = new HardwareExtensionInfoDTO();
     BeanUtils.copyProperties(original, bean);
     return bean;
   }
 
-  private HardwareExtensionInfo requireOne(Long id) {
+  private HardwareExtensionInfoEntity requireOne(Long id) {
     return hardwareExtensionInfoRepository.findById(id)
         .orElseThrow(() -> new NoSuchElementException("此数据不存在请刷新: " + id));
   }

@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RestController
 @RequestMapping("/deviceTypeRelation")
-public class HardwareTypeRelationController {
+public class DeviceTypeRelationController {
 
 
   @Autowired

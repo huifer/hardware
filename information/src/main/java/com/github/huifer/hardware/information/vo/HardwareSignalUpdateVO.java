@@ -62,4 +62,6 @@ public class HardwareSignalUpdateVO   implements Serializable {
   @Schema(description = "是否参与计算<p>true：启用；false：禁用")
   private Boolean state;
 
+  @Schema(description = "单位")
+  private String unit;
 }

@@ -3,11 +3,11 @@ package com.github.huifer.hardware.information.controller;
 
 import com.github.huifer.hardware.common.base.PageResponse;
 import com.github.huifer.hardware.common.base.ResultResponse;
-import com.github.huifer.hardware.information.dto.HardwareDetailDTO;
-import com.github.huifer.hardware.information.service.HardwareDetailService;
-import com.github.huifer.hardware.information.vo.HardwareDetailQueryVO;
-import com.github.huifer.hardware.information.vo.HardwareDetailUpdateVO;
-import com.github.huifer.hardware.information.vo.HardwareDetailVO;
+import com.github.huifer.hardware.information.dto.DeviceDetailDTO;
+import com.github.huifer.hardware.information.service.DeviceDetailService;
+import com.github.huifer.hardware.information.vo.DeviceDetailQueryVO;
+import com.github.huifer.hardware.information.vo.DeviceDetailUpdateVO;
+import com.github.huifer.hardware.information.vo.DeviceDetailVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -27,14 +27,14 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RestController
 @RequestMapping("/hardwareDetail")
-public class HardwareDetailController {
+public class DeviceDetailController {
 
   @Autowired
-  private HardwareDetailService hardwareDetailService;
+  private DeviceDetailService hardwareDetailService;
 
   @Operation(summary = "保存")
   @PostMapping
-  public ResultResponse<String> save(@Valid @RequestBody HardwareDetailVO vO) {
+  public ResultResponse<String> save(@Valid @RequestBody DeviceDetailVO vO) {
     return ResultResponse.ok(hardwareDetailService.save(vO).toString());
   }
 
@@ -49,21 +49,21 @@ public class HardwareDetailController {
   @PutMapping("/{id}")
   public ResultResponse<Boolean> update(
       @Valid @NotNull(message = "设备id不能为空") @PathVariable("id") Long id,
-      @Valid @RequestBody HardwareDetailUpdateVO vO) {
+      @Valid @RequestBody DeviceDetailUpdateVO vO) {
     return ResultResponse.ok(hardwareDetailService.update(id, vO));
   }
 
   @Operation(summary = "单个查询")
   @GetMapping("/{id}")
-  public ResultResponse<HardwareDetailDTO> getById(
+  public ResultResponse<DeviceDetailDTO> getById(
       @Valid @NotNull(message = "设备id不能为空") @PathVariable("id") Long id) {
     return ResultResponse.ok(hardwareDetailService.getById(id));
   }
 
   @Operation(summary = "分页")
   @PostMapping("/page")
-  public ResultResponse<PageResponse<HardwareDetailDTO>> query(
-      @RequestBody HardwareDetailQueryVO vO) {
+  public ResultResponse<PageResponse<DeviceDetailDTO>> query(
+      @RequestBody DeviceDetailQueryVO vO) {
     return ResultResponse.ok(hardwareDetailService.query(vO));
   }
 }

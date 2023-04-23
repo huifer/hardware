@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @Schema(description = "设备信息")
-public class HardwareDetailDTO implements Serializable {
+public class DeviceDetailDTO implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
@@ -18,11 +18,6 @@ public class HardwareDetailDTO implements Serializable {
   private Long id;
 
 
-  /**
-   * 设备编号
-   */
-  @Schema(description = "设备编号")
-  private String deviceNum;
 
   /**
    * 设备名称

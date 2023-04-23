@@ -44,6 +44,7 @@ public class HardwareSignalServiceImpl implements HardwareSignalService {
     bean.setDefaultWarnLow(vO.getDefaultWarnLow());
     bean.setDefaultWarnHigh(vO.getDefaultWarnHigh());
     bean.setState(vO.getState());
+    bean.setUnit(vO.getUnit());
     bean.setUpdateTime(LocalDateTime.now());
     bean.setCreateTime(LocalDateTime.now());
     bean.setDeleted(false);
@@ -69,6 +70,7 @@ public class HardwareSignalServiceImpl implements HardwareSignalService {
     bean.setDefaultWarnLow(vO.getDefaultWarnLow());
     bean.setDefaultWarnHigh(vO.getDefaultWarnHigh());
     bean.setState(vO.getState());
+    bean.setUnit(vO.getUnit());
     bean.setUpdateTime(LocalDateTime.now());
     return hardwareSignalRepository.save(bean) != null;
   }

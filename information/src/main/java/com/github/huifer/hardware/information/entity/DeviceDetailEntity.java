@@ -7,25 +7,25 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.io.Serializable;
-
 import lombok.Data;
 import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.Where;
 
 /**
- * 硬件类型信号关联表
+ * 设备详情表
  */
+
 @Data
 @Entity
-@Table(name = "hardware_signal_mapping")
+@Table(name = "device_detail")
 @FieldNameConstants
-@Where(clause="deleted = 0 ")
-public class HardwareSignalMapping extends BaseEntity implements Serializable {
+@Where(clause="deleted = 0 and state = 0 ")
+public class DeviceDetailEntity extends BaseEntity implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
   /**
-   * 硬件信号映射关系表主键
+   * 设备详情表主键
    */
   @Id
   @Column(name = "id", nullable = false)
@@ -33,21 +33,35 @@ public class HardwareSignalMapping extends BaseEntity implements Serializable {
   private Long id;
 
   /**
-   * 硬件设备ID
+   * 设备名称
    */
-  @Column(name = "device_id")
-  private String deviceId;
+  @Column(name = "name")
+  private String name;
+
+
 
   /**
-   * 硬件输出信号key
+   * 设备地址
    */
-  @Column(name = "signal_key")
-  private String signalKey;
+  @Column(name = "address")
+  private String address;
 
   /**
-   * 系统指定信号名称
+   * 设备所在经度
    */
-  @Column(name = "system_signal_name")
-  private String systemSignalName;
+  @Column(name = "latitude")
+  private Float latitude;
+
+  /**
+   * 设备所在纬度
+   */
+  @Column(name = "longitude")
+  private Float longitude;
+
+  /**
+   * 状态
+   */
+  @Column(name = "state")
+  private Boolean state;
 
 }

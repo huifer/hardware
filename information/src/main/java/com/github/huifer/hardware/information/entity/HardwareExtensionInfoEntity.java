@@ -12,18 +12,18 @@ import lombok.Data;
 import org.hibernate.annotations.Where;
 
 /**
- * 硬件类型表
+ * 硬件扩展信息表
  */
 @Data
 @Entity
-@Table(name = "hardware_type")
-@Where(clause="deleted = 0 and  ")
-public class HardwareType  extends  BaseEntity implements Serializable {
+@Table(name = "hardware_extension_info")
+@Where(clause="deleted = 0 ")
+public class HardwareExtensionInfoEntity extends  BaseEntity implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
   /**
-   * 设备详情表主键
+   * 硬件扩展信息表主键
    */
   @Id
   @Column(name = "id", nullable = false)
@@ -31,23 +31,16 @@ public class HardwareType  extends  BaseEntity implements Serializable {
   private Long id;
 
   /**
-   * 硬件类型名称
+   * 硬件设备ID
    */
-  @Column(name = "name")
-  private String name;
+  @Column(name = "device_id")
+  private Long deviceId;
 
   /**
-   * 硬件类型编码
+   * 扩展信息
    */
-  @Column(name = "code")
-  private String code;
-
-
-  /**
-   * 硬件类型状态
-   */
-  @Column(name = "state")
-  private Integer state;
+  @Column(name = "ext_info")
+  private String extInfo;
 
 
 

@@ -1,44 +1,54 @@
 package com.github.huifer.hardware.information.entity;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.FieldNameConstants;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
-@FieldNameConstants
-@Document
-public class HardwareTypeEntity implements Serializable {
+import lombok.Data;
+import org.hibernate.annotations.Where;
 
+/**
+ * 硬件类型表
+ */
+@Data
+@Entity
+@Table(name = "hardware_type")
+@Where(clause="deleted = 0 and  ")
+public class HardwareTypeEntity extends  BaseEntity implements Serializable {
+
+  private static final long serialVersionUID = 1L;
+
+  /**
+   * 设备详情表主键
+   */
   @Id
-  private String id;
+  @Column(name = "id", nullable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
   /**
    * 硬件类型名称
-   **/
+   */
+  @Column(name = "name")
   private String name;
 
   /**
-   * 设备类型编码
+   * 硬件类型编码
    */
+  @Column(name = "code")
   private String code;
+
+
   /**
-   * 硬件信号
-   **/
-  private List<HardwareSignalEntity> hardwareSignalEntities;
+   * 硬件类型状态
+   */
+  @Column(name = "state")
+  private Integer state;
 
-  private boolean deleted = false;
 
-  private LocalDateTime createTime;
 
 }

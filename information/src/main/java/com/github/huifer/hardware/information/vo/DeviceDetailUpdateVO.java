@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class HardwareDetailUpdateVO extends HardwareDetailVO implements Serializable {
+public class DeviceDetailUpdateVO extends DeviceDetailVO implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
