@@ -74,4 +74,7 @@ public class HardwareTaskExecutionRecordEntityDTO implements Serializable {
   @Schema(description = "执行时间")
   private LocalDateTime executionTime;
 
+
+  @Schema(description = "创建时间")
+  private java.time.LocalDateTime createTime;
 }

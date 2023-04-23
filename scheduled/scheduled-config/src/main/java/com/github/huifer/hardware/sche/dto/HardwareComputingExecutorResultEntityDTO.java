@@ -32,9 +32,8 @@ public class HardwareComputingExecutorResultEntityDTO implements Serializable {
   @Schema(description = "计算规则唯一标识")
   private Long operationRuleId;
 
+  @Schema(description = "步骤")
   private String step;
-
-
 
 
   /**
@@ -43,4 +42,6 @@ public class HardwareComputingExecutorResultEntityDTO implements Serializable {
   @Schema(description = "执行结果")
   private BigDecimal result;
 
+  @Schema(description = "创建时间")
+  private java.time.LocalDateTime createTime;
 }

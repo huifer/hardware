@@ -4,8 +4,7 @@ import com.github.huifer.hardware.common.base.PageResponse;
 import com.github.huifer.hardware.common.base.SortRequest;
 import com.github.huifer.hardware.information.dto.HardwareSignalDTO;
 import com.github.huifer.hardware.information.entity.BaseEntity;
-import com.github.huifer.hardware.information.entity.HardwareSignalEntity;
-import com.github.huifer.hardware.information.entity.HardwareSignalEntity.Fields;
+import com.github.huifer.hardware.information.entity.HardwareSignal;
 import com.github.huifer.hardware.information.repository.HardwareSignalRepository;
 import com.github.huifer.hardware.information.service.HardwareSignalService;
 import com.github.huifer.hardware.information.vo.HardwareSignalQueryVO;
@@ -37,7 +36,7 @@ public class HardwareSignalServiceImpl implements HardwareSignalService {
 
   @Transactional(rollbackFor = {Exception.class})
   public Long save(HardwareSignalVO vO) {
-    HardwareSignalEntity bean = new HardwareSignalEntity();
+    HardwareSignal bean = new HardwareSignal();
     bean.setName(vO.getName());
     bean.setMinValue(vO.getMinValue());
     bean.setMaxValue(vO.getMaxValue());
@@ -54,7 +53,7 @@ public class HardwareSignalServiceImpl implements HardwareSignalService {
 
   @Transactional(rollbackFor = {Exception.class})
   public Boolean delete(Long id) {
-    HardwareSignalEntity hardwareSignal = requireOne(id);
+    HardwareSignal hardwareSignal = requireOne(id);
     hardwareSignal.setDeleted(true);
     hardwareSignal.setUpdateTime(LocalDateTime.now());
     return hardwareSignalRepository.save(hardwareSignal) != null;
@@ -63,7 +62,7 @@ public class HardwareSignalServiceImpl implements HardwareSignalService {
 
   @Transactional(rollbackFor = {Exception.class})
   public Boolean update(Long id, HardwareSignalUpdateVO vO) {
-    HardwareSignalEntity bean = requireOne(id);
+    HardwareSignal bean = requireOne(id);
     bean.setName(vO.getName());
     bean.setMinValue(vO.getMinValue());
     bean.setMaxValue(vO.getMaxValue());
@@ -76,8 +75,8 @@ public class HardwareSignalServiceImpl implements HardwareSignalService {
   }
 
   public HardwareSignalDTO getById(Long id) {
-    Optional<HardwareSignalEntity> byId = hardwareSignalRepository.findById(id);
-    HardwareSignalEntity original = new HardwareSignalEntity();
+    Optional<HardwareSignal> byId = hardwareSignalRepository.findById(id);
+    HardwareSignal original = new HardwareSignal();
     if (byId.isPresent()) {
       original = byId.get();
     }
@@ -97,29 +96,32 @@ public class HardwareSignalServiceImpl implements HardwareSignalService {
     of = PageRequest.of(vO.getPage(), vO.getSize(), by);
 
     return dbToResp(hardwareSignalRepository.findAll(
-        (Specification<HardwareSignalEntity>) (root, query, cb) -> {
+        (Specification<HardwareSignal>) (root, query, cb) -> {
           List<Predicate> list = new ArrayList<>();
           if (StringUtils.hasText(vO.getName())) {
-            list.add(cb.like(root.get(Fields.name), "%" + vO.getName() + "%"));
+            list.add(cb.like(root.get(HardwareSignal.Fields.name), "%" + vO.getName() + "%"));
           }
           if (vO.getMinValue() != null) {
-            list.add(cb.equal(root.get(Fields.minValue), vO.getMinValue()));
+            list.add(cb.equal(root.get(HardwareSignal.Fields.minValue), vO.getMinValue()));
           }
           if (vO.getMaxValue() != null) {
-            list.add(cb.equal(root.get(Fields.maxValue), vO.getMaxValue()));
+            list.add(cb.equal(root.get(HardwareSignal.Fields.maxValue), vO.getMaxValue()));
           }
           if (vO.getDefaultWarnHigh() != null) {
-            list.add(cb.equal(root.get(Fields.defaultWarnHigh), vO.getDefaultWarnHigh()));
+            list.add(
+                cb.equal(root.get(HardwareSignal.Fields.defaultWarnHigh), vO.getDefaultWarnHigh()));
           }
           if (vO.getDefaultWarnLow() != null) {
-            list.add(cb.equal(root.get(Fields.defaultWarnLow), vO.getDefaultWarnLow()));
+            list.add(
+                cb.equal(root.get(HardwareSignal.Fields.defaultWarnLow), vO.getDefaultWarnLow()));
           }
           list.add(cb.equal(root.get(BaseEntity.Fields.deleted), true));
           return cb.and(list.toArray(Predicate[]::new));
         }, of));
 
   }
-  private PageResponse<HardwareSignalDTO> dbToResp(Page<HardwareSignalEntity> all) {
+
+  private PageResponse<HardwareSignalDTO> dbToResp(Page<HardwareSignal> all) {
     PageResponse<HardwareSignalDTO> response = new PageResponse<>();
     response.setTotal(all.getTotalElements());
     Pageable pageable = all.getPageable();
@@ -134,13 +136,13 @@ public class HardwareSignalServiceImpl implements HardwareSignalService {
   }
 
 
-  private HardwareSignalDTO toDTO(HardwareSignalEntity original) {
+  private HardwareSignalDTO toDTO(HardwareSignal original) {
     HardwareSignalDTO bean = new HardwareSignalDTO();
     BeanUtils.copyProperties(original, bean);
     return bean;
   }
 
-  private HardwareSignalEntity requireOne(Long id) {
+  private HardwareSignal requireOne(Long id) {
     return hardwareSignalRepository.findById(id)
         .orElseThrow(() -> new NoSuchElementException("此数据不存在请刷新: " + id));
   }

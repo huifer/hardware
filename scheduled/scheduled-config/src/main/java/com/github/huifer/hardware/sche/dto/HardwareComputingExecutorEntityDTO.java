@@ -32,5 +32,7 @@ public class HardwareComputingExecutorEntityDTO implements Serializable {
   private Long operationRuleId;
 
 
+  @Schema(description = "创建时间")
+  private java.time.LocalDateTime createTime;
 
 }

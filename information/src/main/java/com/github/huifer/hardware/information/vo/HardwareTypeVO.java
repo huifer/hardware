@@ -23,7 +23,7 @@ public class HardwareTypeVO implements Serializable {
   private String name;
 
   @Schema(description = "设备类型状态 0正常 1停止使用")
-  private int state;
+  private Boolean state;
   /**
    * 硬件类型编码
    */

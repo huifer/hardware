@@ -12,11 +12,7 @@ public class HardwareComputingExecutorEntityQueryVO implements Serializable {
   private static final long serialVersionUID = 1L;
 
 
-  /**
-   * id
-   */
-  @Schema(description = "id")
-  private Long id;
+
 
 
   /**

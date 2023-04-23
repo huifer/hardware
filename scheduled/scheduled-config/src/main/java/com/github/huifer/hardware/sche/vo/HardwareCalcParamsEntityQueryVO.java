@@ -12,12 +12,6 @@ public class HardwareCalcParamsEntityQueryVO implements Serializable {
   private static final long serialVersionUID = 1L;
 
 
-  /**
-   * Id
-   */
-  @Schema(description = "Id")
-  private Long id;
-
 
   /**
    * 公式规则

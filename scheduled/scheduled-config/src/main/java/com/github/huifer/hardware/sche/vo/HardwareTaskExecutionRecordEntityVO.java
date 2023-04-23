@@ -1,7 +1,6 @@
 package com.github.huifer.hardware.sche.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import lombok.Data;
@@ -14,18 +13,12 @@ public class HardwareTaskExecutionRecordEntityVO implements Serializable {
   private static final long serialVersionUID = 1L;
 
 
-  /**
-   * 唯一标识符
-   */
-  @NotNull(message = "id不能为空")(message = "id can not null")
-  @Schema(description = "唯一标识符")
-  private Long id;
 
 
   /**
    * 任务开始时间
    */
-  @NotNull(message = "id不能为空")(message = "startTime can not null")
+
   @Schema(description = "任务开始时间")
   private LocalDateTime startTime;
 
@@ -40,7 +33,7 @@ public class HardwareTaskExecutionRecordEntityVO implements Serializable {
   /**
    * 任务执行状态，0-成功，1-失败
    */
-  @NotNull(message = "id不能为空")(message = "status can not null")
+
   @Schema(description = "任务执行状态，0-成功，1-失败")
   private Integer status;
 

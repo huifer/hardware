@@ -3,7 +3,6 @@ package com.github.huifer.hardware.sche.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import lombok.Data;
 
 @Data
@@ -46,8 +45,9 @@ public class HardwareCalcParamsEntityDTO implements Serializable {
   @Schema(description = "信号值")
   private String signal;
 
-  private String companyId;
 
 
+  @Schema(description = "创建时间")
+  private java.time.LocalDateTime createTime;
 
 }

@@ -13,11 +13,7 @@ public class HardwareTaskExecutionRecordEntityQueryVO implements Serializable {
   private static final long serialVersionUID = 1L;
 
 
-  /**
-   * 唯一标识符
-   */
-  @Schema(description = "唯一标识符")
-  private Long id;
+
 
 
   /**

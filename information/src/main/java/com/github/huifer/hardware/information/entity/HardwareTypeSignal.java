@@ -9,21 +9,23 @@ import jakarta.persistence.Table;
 import java.io.Serializable;
 
 import lombok.Data;
+import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.Where;
 
 /**
- * 硬件扩展信息表
+ * 硬件类型信号关联表
  */
 @Data
 @Entity
-@Table(name = "hardware_extension_info")
+@Table(name = "hardware_type_signal")
+@FieldNameConstants
 @Where(clause="deleted = 0 ")
-public class HardwareExtensionInfoEntity extends  BaseEntity implements Serializable {
+public class HardwareTypeSignal extends BaseEntity implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
   /**
-   * 硬件扩展信息表主键
+   * 关系主键
    */
   @Id
   @Column(name = "id", nullable = false)
@@ -31,17 +33,16 @@ public class HardwareExtensionInfoEntity extends  BaseEntity implements Serializ
   private Long id;
 
   /**
-   * 硬件设备ID
+   * 硬件类型表中的硬件类型ID
    */
-  @Column(name = "device_id")
-  private Long deviceId;
+  @Column(name = "type_id")
+  private Long typeId;
 
   /**
-   * 扩展信息
+   * 硬件信号标识符表中的硬件信号ID
    */
-  @Column(name = "ext_info")
-  private String extInfo;
-
+  @Column(name = "signal_id")
+  private Long signalId;
 
 
 }

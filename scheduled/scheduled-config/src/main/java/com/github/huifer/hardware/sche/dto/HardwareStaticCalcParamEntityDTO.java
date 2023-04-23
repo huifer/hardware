@@ -32,6 +32,6 @@ public class HardwareStaticCalcParamEntityDTO implements Serializable {
   @Schema(description = "公式中的静态参数")
   private BigDecimal staticValue;
 
-
-
+  @Schema(description = "创建时间")
+  private java.time.LocalDateTime createTime;
 }

@@ -17,15 +17,15 @@ import org.hibernate.annotations.Where;
  */
 @Data
 @Entity
-@Table(name = "hardware_type_signal")
+@Table(name = "hardware_signal_mapping")
 @FieldNameConstants
 @Where(clause="deleted = 0 ")
-public class HardwareTypeSignalEntity extends BaseEntity implements Serializable {
+public class HardwareSignalMapping extends BaseEntity implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
   /**
-   * 关系主键
+   * 硬件信号映射关系表主键
    */
   @Id
   @Column(name = "id", nullable = false)
@@ -33,16 +33,21 @@ public class HardwareTypeSignalEntity extends BaseEntity implements Serializable
   private Long id;
 
   /**
-   * 硬件类型表中的硬件类型ID
+   * 硬件设备ID
    */
-  @Column(name = "type_id")
-  private Long typeId;
+  @Column(name = "device_id")
+  private Long deviceId;
 
   /**
-   * 硬件信号标识符表中的硬件信号ID
+   * 硬件输出信号key
    */
-  @Column(name = "signal_id")
-  private Long signalId;
+  @Column(name = "signal_key")
+  private String signalKey;
 
+  /**
+   * 系统指定信号名称
+   */
+  @Column(name = "system_signal_name")
+  private String systemSignalName;
 
 }

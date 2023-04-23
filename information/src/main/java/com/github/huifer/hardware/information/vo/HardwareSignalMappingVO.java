@@ -20,7 +20,7 @@ public class HardwareSignalMappingVO implements Serializable {
    */
   @Schema(description = "硬件设备ID")
   @NotNull(message = "硬件设备不能为空")
-  private String deviceId;
+  private Long deviceId;
 
 
   /**

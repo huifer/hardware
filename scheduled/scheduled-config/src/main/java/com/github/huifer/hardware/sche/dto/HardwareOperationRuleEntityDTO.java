@@ -3,7 +3,6 @@ package com.github.huifer.hardware.sche.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import lombok.Data;
 
 @Data
@@ -53,7 +52,8 @@ public class HardwareOperationRuleEntityDTO implements Serializable {
   @Schema(description = "计算优先级，和step有关")
   private Integer order;
 
-  private String companyId;
+  @Schema(description = "创建时间")
+  private java.time.LocalDateTime createTime;
 
 
 

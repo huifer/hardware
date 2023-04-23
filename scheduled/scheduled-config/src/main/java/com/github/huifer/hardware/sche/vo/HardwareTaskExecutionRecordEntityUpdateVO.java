@@ -1,6 +1,7 @@
 package com.github.huifer.hardware.sche.vo;
 
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

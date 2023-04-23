@@ -1,7 +1,6 @@
 package com.github.huifer.hardware.sche.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
 import lombok.Data;
 
@@ -13,12 +12,7 @@ public class HardwareOperationRuleEntityVO implements Serializable {
   private static final long serialVersionUID = 1L;
 
 
-  /**
-   * id
-   */
-  @NotNull(message = "id不能为空")(message = "id can not null")
-  @Schema(description = "id")
-  private Long id;
+
 
 
   /**

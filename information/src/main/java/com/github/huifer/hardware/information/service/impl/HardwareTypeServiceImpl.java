@@ -1,6 +1,6 @@
 package com.github.huifer.hardware.information.service.impl;
 
-import com.github.huifer.hardware.information.entity.HardwareTypeEntity;
+import com.github.huifer.hardware.information.entity.HardwareType;
 import com.github.huifer.hardware.information.repository.HardwareTypeRepository;
 import com.github.huifer.hardware.information.service.HardwareTypeService;
 import com.github.huifer.hardware.information.vo.HardwareTypeDTO;
@@ -24,7 +24,7 @@ public class HardwareTypeServiceImpl implements HardwareTypeService {
 
   @Transactional(rollbackFor = {Exception.class})
   public Long save(HardwareTypeVO vO) {
-    HardwareTypeEntity bean = new HardwareTypeEntity();
+    HardwareType bean = new HardwareType();
     bean.setName(vO.getName());
     bean.setCode(vO.getCode());
     bean.setState(vO.getState());
@@ -36,7 +36,7 @@ public class HardwareTypeServiceImpl implements HardwareTypeService {
 
   @Transactional(rollbackFor = {Exception.class})
   public Boolean delete(Long id) {
-    HardwareTypeEntity hardwareType = requireOne(id);
+    HardwareType hardwareType = requireOne(id);
     hardwareType.setDeleted(true);
     hardwareType.setUpdateTime(LocalDateTime.now());
     return hardwareTypeRepository.save(hardwareType) != null;
@@ -44,7 +44,7 @@ public class HardwareTypeServiceImpl implements HardwareTypeService {
 
   @Transactional(rollbackFor = {Exception.class})
   public Boolean update(Long id, HardwareTypeUpdateVO vO) {
-    HardwareTypeEntity hardwareType = requireOne(id);
+    HardwareType hardwareType = requireOne(id);
     hardwareType.setUpdateTime(LocalDateTime.now());
     hardwareType.setCode(vO.getCode());
     hardwareType.setState(vO.getState());
@@ -53,8 +53,8 @@ public class HardwareTypeServiceImpl implements HardwareTypeService {
   }
 
   public HardwareTypeDTO getById(Long id) {
-    Optional<HardwareTypeEntity> byId = hardwareTypeRepository.findById(id);
-    HardwareTypeEntity original = new HardwareTypeEntity();
+    Optional<HardwareType> byId = hardwareTypeRepository.findById(id);
+    HardwareType original = new HardwareType();
     if (byId.isPresent()) {
       original = byId.get();
     }
@@ -62,19 +62,19 @@ public class HardwareTypeServiceImpl implements HardwareTypeService {
   }
 
   public List<HardwareTypeDTO> query() {
-    List<HardwareTypeEntity> typeList = hardwareTypeRepository.findAll();
+    List<HardwareType> typeList = hardwareTypeRepository.findAll();
     List<HardwareTypeDTO> hardwareTypeDTOList = typeList.stream().map(this::toDTO)
         .collect(Collectors.toList());
     return hardwareTypeDTOList;
   }
 
-  private HardwareTypeDTO toDTO(HardwareTypeEntity original) {
+  private HardwareTypeDTO toDTO(HardwareType original) {
     HardwareTypeDTO bean = new HardwareTypeDTO();
     BeanUtils.copyProperties(original, bean);
     return bean;
   }
 
-  private HardwareTypeEntity requireOne(Long id) {
+  private HardwareType requireOne(Long id) {
     return hardwareTypeRepository.findById(id)
         .orElseThrow(() -> new NoSuchElementException("此数据不存在请刷新: " + id));
   }

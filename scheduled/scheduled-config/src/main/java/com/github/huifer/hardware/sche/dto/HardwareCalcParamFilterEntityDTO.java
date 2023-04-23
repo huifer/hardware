@@ -4,7 +4,6 @@ package com.github.huifer.hardware.sche.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import lombok.Data;
 
 @Data
@@ -47,6 +46,7 @@ public class HardwareCalcParamFilterEntityDTO implements Serializable {
   @Schema(description = "默认左等于 0 左等于 1 右等于")
   private Boolean lefteqRighteqState;
 
-
+  @Schema(description = "创建时间")
+  private java.time.LocalDateTime createTime;
 
 }

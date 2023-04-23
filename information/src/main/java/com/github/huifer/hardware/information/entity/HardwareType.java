@@ -7,20 +7,18 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.io.Serializable;
+
 import lombok.Data;
-import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.Where;
 
 /**
- * 设备详情表
+ * 硬件类型表
  */
-
 @Data
 @Entity
-@Table(name = "device_detail")
-@FieldNameConstants
-@Where(clause="deleted = 0 and state = 0 ")
-public class DeviceDetailEntity extends BaseEntity implements Serializable {
+@Table(name = "hardware_type")
+@Where(clause="deleted = 0 and  ")
+public class HardwareType  extends  BaseEntity implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
@@ -33,35 +31,30 @@ public class DeviceDetailEntity extends BaseEntity implements Serializable {
   private Long id;
 
   /**
-   * 设备名称
+   * 硬件类型名称
    */
   @Column(name = "name")
   private String name;
 
-
-
   /**
-   * 设备地址
+   * 硬件类型编码
    */
-  @Column(name = "address")
-  private String address;
+  @Column(name = "code")
+  private String code;
+
+
+
+
 
   /**
-   * 设备所在经度
-   */
-  @Column(name = "latitude")
-  private Float latitude;
-
-  /**
-   * 设备所在纬度
-   */
-  @Column(name = "longitude")
-  private Float longitude;
-
-  /**
-   * 状态
+   * 是否启用停用
+   *  <p>true：启用；false：禁用
    */
   @Column(name = "state")
   private Boolean state;
+
+
+  @Column(name = "unit")
+  private String unit;
 
 }

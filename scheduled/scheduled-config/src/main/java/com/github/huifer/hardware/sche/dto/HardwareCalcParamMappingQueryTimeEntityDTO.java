@@ -30,15 +30,17 @@ public class HardwareCalcParamMappingQueryTimeEntityDTO implements Serializable 
    * 查询时间
    */
   @Schema(description = "查询时间")
-  private LocalDateTime start;
+  private LocalDateTime startTime;
 
 
   /**
    * 查询结束时间
    */
   @Schema(description = "查询结束时间")
-  private LocalDateTime end;
+  private LocalDateTime endTime;
 
 
+  @Schema(description = "创建时间")
+  private java.time.LocalDateTime createTime;
 
 }

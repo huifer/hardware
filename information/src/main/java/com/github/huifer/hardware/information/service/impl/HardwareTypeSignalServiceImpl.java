@@ -1,7 +1,7 @@
 package com.github.huifer.hardware.information.service.impl;
 
 import com.github.huifer.hardware.information.dto.HardwareTypeSignalDTO;
-import com.github.huifer.hardware.information.entity.HardwareTypeSignalEntity;
+import com.github.huifer.hardware.information.entity.HardwareTypeSignal;
 import com.github.huifer.hardware.information.repository.HardwareTypeSignalRepository;
 import com.github.huifer.hardware.information.service.HardwareTypeSignalService;
 import com.github.huifer.hardware.information.vo.HardwareTypeSignalUpdateVO;
@@ -22,7 +22,7 @@ public class HardwareTypeSignalServiceImpl implements HardwareTypeSignalService 
 
   @Transactional(rollbackFor = {Exception.class})
   public Long save(HardwareTypeSignalVO vO) {
-    HardwareTypeSignalEntity bean = new HardwareTypeSignalEntity();
+    HardwareTypeSignal bean = new HardwareTypeSignal();
     bean.setTypeId(vO.getTypeId());
     bean.setSignalId(vO.getSignalId());
     bean.setUpdateTime(LocalDateTime.now());
@@ -34,7 +34,7 @@ public class HardwareTypeSignalServiceImpl implements HardwareTypeSignalService 
 
   @Transactional(rollbackFor = {Exception.class})
   public Boolean delete(Long id) {
-    HardwareTypeSignalEntity hardwareTypeSignal = requireOne(id);
+    HardwareTypeSignal hardwareTypeSignal = requireOne(id);
     hardwareTypeSignal.setDeleted(true);
     hardwareTypeSignal.setUpdateTime(LocalDateTime.now());
     return hardwareTypeSignalRepository.save(hardwareTypeSignal) !=null;
@@ -42,7 +42,7 @@ public class HardwareTypeSignalServiceImpl implements HardwareTypeSignalService 
 
   @Transactional(rollbackFor = {Exception.class})
   public Boolean update(Long id, HardwareTypeSignalUpdateVO vO) {
-    HardwareTypeSignalEntity bean = requireOne(id);
+    HardwareTypeSignal bean = requireOne(id);
     bean.setTypeId(vO.getTypeId());
     bean.setSignalId(vO.getSignalId());
     bean.setUpdateTime(LocalDateTime.now());
@@ -50,8 +50,8 @@ public class HardwareTypeSignalServiceImpl implements HardwareTypeSignalService 
   }
 
   public HardwareTypeSignalDTO getById(Long id) {
-    Optional<HardwareTypeSignalEntity> byId = hardwareTypeSignalRepository.findById(id);
-    HardwareTypeSignalEntity original = new HardwareTypeSignalEntity();
+    Optional<HardwareTypeSignal> byId = hardwareTypeSignalRepository.findById(id);
+    HardwareTypeSignal original = new HardwareTypeSignal();
     if (byId.isPresent()) {
       original = byId.get();
     }
@@ -60,13 +60,13 @@ public class HardwareTypeSignalServiceImpl implements HardwareTypeSignalService 
 
 
 
-  private HardwareTypeSignalDTO toDTO(HardwareTypeSignalEntity original) {
+  private HardwareTypeSignalDTO toDTO(HardwareTypeSignal original) {
     HardwareTypeSignalDTO bean = new HardwareTypeSignalDTO();
     BeanUtils.copyProperties(original, bean);
     return bean;
   }
 
-  private HardwareTypeSignalEntity requireOne(Long id) {
+  private HardwareTypeSignal requireOne(Long id) {
     return hardwareTypeSignalRepository.findById(id)
         .orElseThrow(() -> new NoSuchElementException("此数据不存在请刷新: " + id));
   }

@@ -10,11 +10,7 @@ public class HardwareCalcParamMappingQueryEntityQueryVO implements java.io.Seria
 
   private static final long serialVersionUID = 1L;
 
-  /**
-   * id
-   */
-  @Schema(description = "id")
-  private java.lang.Long id;
+
 
   /**
    * 公式参数id

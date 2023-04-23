@@ -4,7 +4,7 @@ import com.github.huifer.hardware.common.base.PageResponse;
 import com.github.huifer.hardware.common.base.SortRequest;
 import com.github.huifer.hardware.information.dto.HardwareSignalMappingDTO;
 import com.github.huifer.hardware.information.entity.BaseEntity;
-import com.github.huifer.hardware.information.entity.HardwareSignalMappingEntity;
+import com.github.huifer.hardware.information.entity.HardwareSignalMapping;
 import com.github.huifer.hardware.information.repository.HardwareSignalMappingRepository;
 import com.github.huifer.hardware.information.service.HardwareSignalMappingService;
 import com.github.huifer.hardware.information.vo.HardwareSignalMappingQueryVO;
@@ -34,7 +34,7 @@ public class HardwareSignalMappingServiceImpl implements HardwareSignalMappingSe
   private HardwareSignalMappingRepository hardwareSignalMappingRepository;
 
   public Long save(HardwareSignalMappingVO vO) {
-    HardwareSignalMappingEntity bean = new HardwareSignalMappingEntity();
+    HardwareSignalMapping bean = new HardwareSignalMapping();
     bean.setDeviceId(vO.getDeviceId());
     bean.setSignalKey(vO.getSignalKey());
     bean.setSystemSignalName(vO.getSystemSignalName());
@@ -46,25 +46,25 @@ public class HardwareSignalMappingServiceImpl implements HardwareSignalMappingSe
   }
 
   public Boolean delete(Long id) {
-    HardwareSignalMappingEntity hardwareSignalMapping = requireOne(id);
+    HardwareSignalMapping hardwareSignalMapping = requireOne(id);
     hardwareSignalMapping.setDeleted(true);
     hardwareSignalMapping.setUpdateTime(LocalDateTime.now());
    return hardwareSignalMappingRepository.save(hardwareSignalMapping) != null;
   }
 
   public Boolean update(Long id, HardwareSignalMappingUpdateVO vO) {
-    HardwareSignalMappingEntity hardwareSignalMapping = requireOne(id);
+    HardwareSignalMapping hardwareSignalMapping = requireOne(id);
     hardwareSignalMapping.setDeviceId(vO.getDeviceId());
     hardwareSignalMapping.setSignalKey(vO.getSignalKey());
     hardwareSignalMapping.setSystemSignalName(vO.getSystemSignalName());
     hardwareSignalMapping.setCreateTime(LocalDateTime.now());
-    HardwareSignalMappingEntity bean = requireOne(id);
+    HardwareSignalMapping bean = requireOne(id);
     return hardwareSignalMappingRepository.save(bean) != null;
   }
 
   public HardwareSignalMappingDTO getById(Long id) {
-    Optional<HardwareSignalMappingEntity> byId = hardwareSignalMappingRepository.findById(id);
-    HardwareSignalMappingEntity original = new HardwareSignalMappingEntity();
+    Optional<HardwareSignalMapping> byId = hardwareSignalMappingRepository.findById(id);
+    HardwareSignalMapping original = new HardwareSignalMapping();
     if (byId.isPresent()){
       original = byId.get();
     }
@@ -84,17 +84,17 @@ public class HardwareSignalMappingServiceImpl implements HardwareSignalMappingSe
     of = PageRequest.of(vO.getPage(), vO.getSize(), by);
 
     return dbToResp(hardwareSignalMappingRepository.findAll(
-        (Specification<HardwareSignalMappingEntity>) (root, query, cb) -> {
+        (Specification<HardwareSignalMapping>) (root, query, cb) -> {
           List<Predicate> list = new ArrayList<>();
           if (StringUtils.hasText(vO.getSystemSignalName())) {
-            list.add(cb.like(root.get(HardwareSignalMappingEntity.Fields.systemSignalName),
+            list.add(cb.like(root.get(HardwareSignalMapping.Fields.systemSignalName),
                 "%" + vO.getSystemSignalName() + "%"));
           }
           if (vO.getDeviceId() != null) {
-            list.add(cb.equal(root.get(HardwareSignalMappingEntity.Fields.deviceId), vO.getDeviceId()));
+            list.add(cb.equal(root.get(HardwareSignalMapping.Fields.deviceId), vO.getDeviceId()));
           }
           if (StringUtils.hasText(vO.getSignalKey())) {
-            list.add(cb.like(root.get(HardwareSignalMappingEntity.Fields.signalKey),
+            list.add(cb.like(root.get(HardwareSignalMapping.Fields.signalKey),
                 "%" + vO.getSignalKey() + "%"));
           }
           list.add(cb.equal(root.get(BaseEntity.Fields.deleted), true));
@@ -102,7 +102,7 @@ public class HardwareSignalMappingServiceImpl implements HardwareSignalMappingSe
         }, of));
 
   }
-  private PageResponse<HardwareSignalMappingDTO> dbToResp(Page<HardwareSignalMappingEntity> all) {
+  private PageResponse<HardwareSignalMappingDTO> dbToResp(Page<HardwareSignalMapping> all) {
     PageResponse<HardwareSignalMappingDTO> response = new PageResponse<>();
     response.setTotal(all.getTotalElements());
     Pageable pageable = all.getPageable();
@@ -115,13 +115,13 @@ public class HardwareSignalMappingServiceImpl implements HardwareSignalMappingSe
     }).toList());
     return response;
   }
-  private HardwareSignalMappingDTO toDTO(HardwareSignalMappingEntity original) {
+  private HardwareSignalMappingDTO toDTO(HardwareSignalMapping original) {
     HardwareSignalMappingDTO bean = new HardwareSignalMappingDTO();
     BeanUtils.copyProperties(original, bean);
     return bean;
   }
 
-  private HardwareSignalMappingEntity requireOne(Long id) {
+  private HardwareSignalMapping requireOne(Long id) {
     return hardwareSignalMappingRepository.findById(id)
         .orElseThrow(() -> new NoSuchElementException("此数据不存在请刷新: " + id));
   }

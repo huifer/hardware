@@ -34,18 +34,10 @@ public class HardwareCalcParamMappingQueryEntityDTO implements java.io.Serializa
   @Schema(description = "设备类型ID")
   private java.lang.Long deviceTypeId;
 
-  private java.lang.String companyId;
 
-  private java.lang.String createUserId;
-
-  private java.time.LocalDateTime updateTime;
-
+  @Schema(description = "创建时间")
   private java.time.LocalDateTime createTime;
 
-  private java.lang.String updateUserId;
 
-  private java.lang.Boolean deleted;
-
-  private java.lang.Long version;
 
 }
