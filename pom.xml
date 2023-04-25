@@ -18,6 +18,7 @@
     <module>information</module>
     <module>web</module>
     <module>mq</module>
+    <module>receiver</module>
   </modules>
 
   <dependencyManagement>

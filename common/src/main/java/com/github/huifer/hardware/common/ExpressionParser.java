@@ -60,19 +60,29 @@ public class ExpressionParser {
     public static void main(String[] args) throws IOException {
         // 示例 JSON 字符串
 //        String jsonStr = "{\"left\":{\"left\":\"a\",\"op\":\"乘法\",\"right\":\"2\"},\"op\":\"加法\",\"right\":{\"left\":\"a\",\"op\":\"幂\",\"right\":{\"left\":\"b\",\"op\":\"sqrt\",\"right\":\"b\"}}}}";
-        String jsonStr = "{\n"
-            + "    \"left\": {\n"
-            + "        \"left\": \"a\",\n"
-            + "        \"op\": \"加法\",\n"
-            + "        \"right\": \"b\"\n"
-            + "    },\n"
-            + "    \"op\": \"除法\",\n"
-            + "    \"right\": {\n"
-            + "            \"left\": \"a\",\n"
-            + "            \"op\": \"减法\",\n"
-            + "            \"right\": \"b\"\n"
-            + "    }\n"
-            + "}\n";
+        String jsonStr = """
+                        
+                        
+                        
+            {
+              "left":  {
+                    "left":"1",
+                    "op":"除法",
+                    "right":"2"
+                },
+                "op":"加法",
+                "right":{
+                   "left":{ "left":"a",
+                   "op":"除法",
+                   "right":"2"},
+                   "op":"乘法",
+                   "right":{
+                    "left":"2",
+                    "op":"sqrt",
+                    "right":"3"
+                   }
+                }
+            }""";
         // 解析 JSON 字符串为 JsonNode 对象
         System.out.println("原始JSON = " + jsonStr);
         ObjectMapper objectMapper = new ObjectMapper();
