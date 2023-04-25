@@ -93,7 +93,7 @@ public class ExpressionParser {
 
         // 打印结果
         System.out.println("解析数学公式 = " + result);
-        Object D = ExpressionParserA.strToJson(result);
+        Object D = ExpressionParserA.strToJson("(((((a+b)+b)*2*a)+a)+b)*b*c");
         System.out.println("反解析JSON = " + D);
         String s = parseExpression(objectMapper.readTree(D.toString()));
         System.out.println("反解析数学公式 = " + s);
